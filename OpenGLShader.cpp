@@ -9,7 +9,7 @@ char		*OpenGLShader::filetobuf(const char *file)
     
     fptr = fopen(file, "rb");
     if (!fptr)
-        return NULL;
+        return nullptr;
     fseek(fptr, 0, SEEK_END);
     length = ftell(fptr);
     buf = (char*)malloc(length+1);
@@ -21,6 +21,31 @@ char		*OpenGLShader::filetobuf(const char *file)
     return buf;
 }
 
+std::string			OpenGLShader::readFile(std::string & source)
+{
+	std::ifstream					ifs(source);
+	std::stringstream				ss;
+
+	if (ifs.good()) {
+		ss << ifs.rdbuf();
+		if (!(ss.good())) {
+			std::cout << "Fail to read input." << std::endl;
+			//this->_errorFlag = true;
+			return (nullptr);
+		}
+	}
+	else {
+		std::cout << "Fail to open given file." << std::endl;
+		//this->_errorFlag = true;
+		return (nullptr);
+	}
+
+	ifs.close();
+	return (ss.str());
+}
+
+
+
 void			OpenGLShader::deleteShader()
 {
 	for (auto i = _shaders.begin() ; i < _shaders.end() ; i++)
@@ -31,44 +56,46 @@ void			OpenGLShader::deleteShader()
 
 int				OpenGLShader::addShader(GLenum type, std::string filename)
 {
-    GLuint shader;
-    GLint shader_ok;
-    GLsizei log_length;
-    char info_log[8192];
+	GLuint shader;
+	GLint shader_ok;
+	GLsizei log_length;
+	char info_log[8192];
 	const char	*source;
-    
+
 	source = filetobuf(filename.c_str());
-    shader = glCreateShader(type);
-    if (shader != 0)
-    {
-        glShaderSource(shader, 1, &source, NULL);
-        glCompileShader(shader);
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
-        if (shader_ok != GL_TRUE)
-        {
-            fprintf(stderr, "ERROR: Failed to compile %s shader\n", (type == GL_FRAGMENT_SHADER) ? "fragment" : "vertex" );
-            glGetShaderInfoLog(shader, 8192, &log_length,info_log);
-            fprintf(stderr, "ERROR: \n%s\n\n", info_log);
-            glDeleteShader(shader);
-            shader = 0;
+	if (source == nullptr)
+		return (0);
+	shader = glCreateShader(type);
+	if (shader != 0)
+	{
+		glShaderSource(shader, 1, &source, NULL);
+		glCompileShader(shader);
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
+		if (shader_ok != GL_TRUE)
+		{
+			fprintf(stderr, "ERROR: Failed to compile %s shader\n", (type == GL_FRAGMENT_SHADER) ? "fragment" : "vertex" );
+			glGetShaderInfoLog(shader, 8192, &log_length,info_log);
+			fprintf(stderr, "ERROR: \n%s\n\n", info_log);
+			glDeleteShader(shader);
+			shader = 0;
 			return (0);
-        }
-    }
+		}
+	}
 	_shaders.push_back(shader);
-    return (1);
+	return (1);
 }
 
 int				OpenGLShader::createProgram()
 {
-    GLuint program = 0u;
-    GLint program_ok;
-    GLsizei log_length;
-    char info_log[8192];
-    
-    /* make the program that connect the two shader and link it */
-    program = glCreateProgram();
-    if (program != 0u)
-    {
+	GLuint program = 0u;
+	GLint program_ok;
+	GLsizei log_length;
+	char info_log[8192];
+
+	/* make the program that connect the two shader and link it */
+	program = glCreateProgram();
+	if (program != 0u)
+	{
 		/* attach both shader and link */
 		for (auto i = _shaders.begin() ; i < _shaders.end() ; i++)
 		{
@@ -86,9 +113,9 @@ int				OpenGLShader::createProgram()
 			program = 0u;
 			return (0);
 		}
-    }
+	}
 	_shaderProgram = program;
-    return (1);
+	return (1);
 }
 
 GLuint			OpenGLShader::getProgram()

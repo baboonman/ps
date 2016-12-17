@@ -1,14 +1,8 @@
 #include "OpenGLManager.hpp"
 
-void					OpenGLManager::createProjectionMatrix(void)
+void					key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	this->_clipInfo.aspect = this->_winInfo.width / this->_winInfo.height;
-	this->_projectionMatrix.computeProjectionMatrix(this->_clipInfo.fov, this->_clipInfo.aspect, this->_clipInfo.zNear, this->_clipInfo.zFar);
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	Control*		control;
+	Control*			control;
 
 	(void)scancode;
 	(void)mods;
@@ -18,27 +12,88 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	control->processInput(key, action);
 }
 
-static void cursor_position_callback(GLFWwindow* window, double xPos, double yPos)
+static void				cursor_position_callback(GLFWwindow* window, double xPos, double yPos)
 {
-	Control*		control;
+	Control*			control;
 
 	control = reinterpret_cast<Control *>(glfwGetWindowUserPointer(window));
 	control->processMouse(xPos, yPos);
 }
 
-void error_callback(int error, const char* description)
+void 					error_callback(int error, const char* description)
 {
 	std::cout << "Error #" << error << ": " << description << std::endl;
 }
 
-void				OpenGLManager::initOpenGl( void )
+
+
+OpenGLManager::OpenGLManager()
 {
-    int     width, height;
+	this->_setWindowInfo(512, 512, "Untitled");
+	this->_setClippingInfo(0.785f, 1, 0.1, 10000.f);
+	this->_initOpenGl();
+	this->_createProjectionMatrix();
+}
+
+OpenGLManager::OpenGLManager(GLfloat width, GLfloat height, std::string winName)
+{
+	this->_setWindowInfo(width, height, winName);
+	this->_setClippingInfo(0.785f, width / height, 0.1, 100000.f);
+	this->_initOpenGl();
+	this->_createProjectionMatrix();
+}
+
+/*
+OpenGLManager::OpenGLManager(const OpenGLManager & rhs)
+{
+	*this = rhs;
+}
+*/
+
+OpenGLManager::~OpenGLManager()
+{
+    glfwDestroyWindow(this->_window);
+    glfwTerminate();
+    // delete this->_window ???
+}
+
+/*
+OpenGLManager&			OpenGLManager::operator=(const OpenGLManager & rhs)
+{
+	this->_window = 
+	
+	return (*this);
+}
+*/
+
+void					OpenGLManager::_setWindowInfo(GLfloat width, GLfloat height, std::string name)
+{
+	this->_winInfo.width = width;
+	this->_winInfo.height = height;
+	this->_winInfo.winName = name;
+}
+
+void					OpenGLManager::_setClippingInfo(GLfloat fov, GLfloat aspect, GLfloat zNear, GLfloat zFar)
+{
+	this->_clipInfo.fov = fov;
+	this->_clipInfo.aspect = aspect;
+	this->_clipInfo.zNear = zNear;
+	this->_clipInfo.zFar = zFar;
+}
+
+void					OpenGLManager::_createProjectionMatrix(void)
+{
+	this->_clipInfo.aspect = this->_winInfo.width / this->_winInfo.height;
+	this->_projectionMatrix.computeProjectionMatrix(this->_clipInfo.fov, this->_clipInfo.aspect, this->_clipInfo.zNear, this->_clipInfo.zFar);
+}
+
+void					OpenGLManager::_initOpenGl( void )
+{
+    int     			width, height;
+
     glfwSetErrorCallback(error_callback);
-    
     if (!glfwInit())
         exit(0);
-    
 	glfwWindowHint(GLFW_SAMPLES, 4);
   	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -65,44 +120,12 @@ void				OpenGLManager::initOpenGl( void )
     glViewport(0, 0, width, height);
 }
 
-OpenGLManager::OpenGLManager()
-{
-	_winInfo.width = 512;
-	_winInfo.height = 512;
-	_winInfo.winName = "Untitled";
-	_clipInfo.fov = 0.785f;
-	_clipInfo.aspect = 1;
-	_clipInfo.zNear = 0.1;
-	_clipInfo.zFar = 10000;
-	initOpenGl();
-	this->createProjectionMatrix();
-}
-
-OpenGLManager::OpenGLManager( GLfloat width, GLfloat height, std::string winName ) 
-{
-	_winInfo.width = width;
-	_winInfo.height = height;
-	_winInfo.winName = winName;
-	_clipInfo.fov = 0.785f;
-	_clipInfo.aspect = width / height;
-	_clipInfo.zNear = 0.1f;
-	_clipInfo.zFar = 100000.f;
-	initOpenGl();
-	this->createProjectionMatrix();
-}
-
-OpenGLManager::~OpenGLManager()
-{
-    glfwDestroyWindow(_window);
-    glfwTerminate();
-}
-
-int				OpenGLManager::shouldClose()
+int						OpenGLManager::shouldClose()
 {
 	return (glfwWindowShouldClose(this->_window));
 }
 
-void				OpenGLManager::swap()
+void					OpenGLManager::swap()
 {
 	glfwSwapBuffers(this->_window);
 }

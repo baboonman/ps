@@ -32,19 +32,24 @@ class							OpenGLManager
 {
 	public:
 								OpenGLManager();
-								OpenGLManager( GLfloat width, GLfloat height, std::string winName );
+//								OpenGLManager(const OpenGLManager & rhs);
+								OpenGLManager(GLfloat width, GLfloat height, std::string winName);
 								~OpenGLManager();
+//		OpenGLManager&			operator=(const OpenGLManager & rhs);
+
 		void					setWindowName(std::string name);
 		int						shouldClose( void );
 		void					swap( void );
-		void					createProjectionMatrix( void );
 		void					setControl(Control *control);
 		OpenGLMatrix			getProjMat();
 
-	private:
-		void					initOpenGl( void );
 
 	private:
+		void					_initOpenGl( void );
+		void					_setWindowInfo(GLfloat width, GLfloat height, std::string name);
+		void					_setClippingInfo(GLfloat fov, GLfloat aspect, GLfloat zNear, GLfloat zFar);
+		void					_createProjectionMatrix( void );
+
     	GLFWwindow				*_window;
 		OpenGLMatrix			_projectionMatrix;
 		t_window_info			_winInfo;

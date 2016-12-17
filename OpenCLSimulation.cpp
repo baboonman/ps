@@ -8,9 +8,9 @@ OpenCLSimulation::OpenCLSimulation(int nbParticles) : _nbParticles(nbParticles)
 	this->_glMan->setControl(&(this->_control));	
 	std::cout << "Init OpenGL Scene" << std::endl;
 	this->_glScene = new OpenGLScene(nbParticles);
-	this->_glScene->createShaderProg("vs.glsl", "fs.glsl");
-glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), 0.0f);
-glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), 0.0f);
+	this->_glScene->createShaderProg("shader/vs.glsl", "shader/fs.glsl");
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), 0.0f);
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), 0.0f);
 	this->_glScene->initVbo();
 	std::cout << "Create CL Context" << std::endl;
 	this->createContext();

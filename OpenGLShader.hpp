@@ -5,6 +5,8 @@
 # include <stdlib.h>
 # include <string>
 # include <vector>
+# include <fstream>
+# include <sstream>
 
 # include "OpenGLInc.hpp"
 
@@ -17,7 +19,9 @@ class					OpenGLShader
 		GLuint					getProgram( void );
 
 		char					*filetobuf( const char *file );
+		std::string				readFile(std::string & source);
 		void					deleteShader( void );
+
 	private:
     	GLuint					_shaderProgram;
 		std::vector<GLuint>		_shaders;

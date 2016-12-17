@@ -8,7 +8,7 @@
 # include <map>
 # include "OpenGLInc.hpp"
 # include "OpenCLInc.hpp"
-# include "OpencLError.hpp"
+# include "OpenCLError.hpp"
 
 typedef std::pair<std::string, std::string> t_makePair;
 

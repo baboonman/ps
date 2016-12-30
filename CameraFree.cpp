@@ -1,6 +1,6 @@
-#include "FreeCamera.hpp"
+#include "CameraFree.hpp"
 
-FreeCamera::FreeCamera(t_vecf eyePos, float pitch, float yaw)
+CameraFree::CameraFree(t_vecf eyePos, float pitch, float yaw)
 	: _eyePos(eyePos), _pitch(pitch), _yaw(yaw), _oldX(0), _oldY(0)
 {
 	this->initKeyPress();
@@ -8,9 +8,10 @@ FreeCamera::FreeCamera(t_vecf eyePos, float pitch, float yaw)
 	this->_viewMatrix.setMatrix(calculateMatrix());
 }
 
-void			FreeCamera::controlKey(int key, int action , int mods)
+void			CameraFree::controlKey(int key, int action , int mods)
 {
-	float		sens = 0.5f;
+//	float		sens = 0.5f;
+	float		sens = 500.f;
 	t_vecf		zero = {0.0f, 0.0f, 0.0f};
 	t_vecf		yTrP = {0.0f, 1.0f, 0.0f};
 	t_vecf		yTrM = {0.0f, -1.0f, 0.0f};
@@ -19,12 +20,12 @@ void			FreeCamera::controlKey(int key, int action , int mods)
 	{
 		if (mods == MOD_SHIFT)
 		{
-			if (key == 32) // KEY_SPACE
+			if (key == 'E') // KEY_SPACE
 				this->_keyPress[2] = yTrM;
 		}
 		else
 		{
-			if (key == 32) // KEY_SPACE
+			if (key == 'E') // KEY_SPACE
 				this->_keyPress[2] = yTrP;
 			else if (key == (int)'W')
 				this->_keyPress[0] = this->_viewDir;
@@ -38,7 +39,7 @@ void			FreeCamera::controlKey(int key, int action , int mods)
 	}
 	else if (action == ACTION_RELEASE)
 	{
-		if (key == 32)
+		if (key == 'E')
 			this->_keyPress[2] = zero;
 		else if (key == (int)'W' || key == (int)'S')
 			this->_keyPress[0] = zero;
@@ -49,7 +50,7 @@ void			FreeCamera::controlKey(int key, int action , int mods)
 	this->_viewMatrix.setMatrix(calculateMatrix());
 }
 
-void			FreeCamera::initKeyPress()
+void			CameraFree::initKeyPress()
 {
 	t_vecf		zero = {0.0f, 0.0f, 0.0f};
 	this->_keyPress[0] = zero;
@@ -57,14 +58,14 @@ void			FreeCamera::initKeyPress()
 	this->_keyPress[2] = zero;
 }
 
-t_vecf			FreeCamera::mergeKeyPress(float sens)
+t_vecf			CameraFree::mergeKeyPress(float sens)
 {
 	t_vecf		merge = add(add(this->_keyPress[0], this->_keyPress[1]), this->_keyPress[2]);
 	merge = scale(normalize(merge), sens);
 	return merge;
 }
 
-void			FreeCamera::calcViewDir()
+void			CameraFree::calcViewDir()
 {
 	this->_viewDir.x = sin(this->_yaw);
 	this->_viewDir.y = -(sin(this->_pitch)*cos(this->_yaw));
@@ -76,7 +77,7 @@ void			FreeCamera::calcViewDir()
 	this->_viewNorm = normalize(this->_viewNorm);
 }
 
-void			FreeCamera::controlMouse(double xPos, double yPos)
+void			CameraFree::controlMouse(double xPos, double yPos)
 {
 	double		sens = 0.0005f;
 	double		x = xPos - this->_oldX;
@@ -92,7 +93,7 @@ void			FreeCamera::controlMouse(double xPos, double yPos)
 	this->_viewMatrix.setMatrix(calculateMatrix());
 }
 
-Matrix			FreeCamera::calculateMatrix()
+Matrix			CameraFree::calculateMatrix()
 {
 	float cosPitch = cos(this->_pitch);
 	float sinPitch = sin(this->_pitch);

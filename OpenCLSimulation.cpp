@@ -109,20 +109,24 @@ void					OpenCLSimulation::runSimulation()
 	std::cout << "Start Loop" << std::endl;
 	while (!this->_glMan->shouldClose())
 	{
-		timer.start();
+//		timer.start();
 		glClearColor(0.0, 0.0, 0.0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-		this->moveParticles(this->_control.posX, this->_control.posY);
-		this->_glScene->drawScene(this->_viewMatrix, this->_glMan->getProjMat());
+timer.start();
+		this->moveParticles(this->_control.posX, this->_control.posY);					//	0.0117
+timer.stop();
+		//this->_glScene->drawScene(this->_viewMatrix, this->_glMan->getProjMat());		//	0.0027
+		this->_glScene->drawScene(this->_control.camera->getViewMatrix(), this->_glMan->getProjMat());		//	0.0027
 
 		this->_glMan->swap();
 		glfwPollEvents();
-		timer.stop();
+//		timer.stop(); 
 		fps += timer.getFps();
 		i++;
-		if (i == 10)
+		if (i == 100)
 		{	
+			//this->_glMan->setWindowName(std::to_string(fps / i));
 			this->_glMan->setWindowName(std::to_string(fps / i));
 			fps = 0.f;
 			i = 0;

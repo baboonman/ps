@@ -5,11 +5,15 @@ void					key_callback(GLFWwindow* window, int key, int scancode, int action, int
 	Control*			control;
 
 	(void)scancode;
-	(void)mods;
 	control = reinterpret_cast<Control *>(glfwGetWindowUserPointer(window));
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
-	control->processInput(key, action);
+	control->processInput(key, action, mods);
+
+	if (control->camOn)
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	else
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 static void				cursor_position_callback(GLFWwindow* window, double xPos, double yPos)
@@ -130,7 +134,7 @@ void					OpenGLManager::swap()
 	glfwSwapBuffers(this->_window);
 }
 
-OpenGLMatrix			OpenGLManager::getProjMat()
+OpenGLMatrix &			OpenGLManager::getProjMat()
 {
 	return this->_projectionMatrix;
 }

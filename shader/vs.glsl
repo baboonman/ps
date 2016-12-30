@@ -30,7 +30,14 @@ void main()
 	dX = 1 - clamp(dX, 0.f, 1.f);
 	dY = 1 - clamp(dY, 0.f, 1.f);
 
-	pColor = vec4(1.0, dC, (dY + dX) / 2, 1.0);
+
+	vec4 view = vec4(0.f, 0.f, -70000.f, 1.f);
+	float vdis = 1 - (distance(view, in_Position) / 10000.f);
+
+	float alpha = clamp(vdis , 0.6f, 1.f);
+
+//	pColor = vec4(1.0, dC, (dY + dX) / 2, 1.0);
+	pColor = vec4(1.0, dC, (dY + dX) / 2, alpha);
 //	pColor = vec4(1.0, 0.0, dC, 1.0);
 	gl_Position = P * V * M * in_Position;
 	gl_PointSize = 1.0;

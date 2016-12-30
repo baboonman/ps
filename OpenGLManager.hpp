@@ -41,7 +41,7 @@ class							OpenGLManager
 		int						shouldClose( void );
 		void					swap( void );
 		void					setControl(Control *control);
-		OpenGLMatrix			getProjMat();
+		OpenGLMatrix &			getProjMat();
 
 
 	private:

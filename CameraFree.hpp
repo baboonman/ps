@@ -3,10 +3,11 @@
 
 # include "CameraControl.hpp"
 
-class				FreeCamera : public CameraControl
+class				CameraFree : public CameraControl
 {
 	public:
-					FreeCamera(t_vecf eyePos, float pitch, float yaw);
+					CameraFree(t_vecf eyePos, float pitch, float yaw);
+		virtual		~CameraFree() {};
 		void		controlKey(int key, int action, int mods);
 		void		controlMouse(double xPos, double yPos);
 

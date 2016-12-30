@@ -41,7 +41,7 @@ class							OpenCLSimulation
 		OpenCLTaskPMove*		_pMoveTask;
 		OpenGLManager*			_glMan;
 		OpenGLScene*			_glScene;
-		OpenGLMatrix			_viewMatrix;
+	//	OpenGLMatrix			_viewMatrix;
 		Control					_control;
 
 		int						_nbParticles;

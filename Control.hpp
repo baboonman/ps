@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include "OpenGLInc.hpp"
+# include "CameraFree.hpp"
 
 
 class						Control
@@ -10,7 +11,7 @@ class						Control
 	public:
 							Control();
 							~Control();
-		void				processInput(int key, int action);
+		void				processInput(int key, int action, int mods);
 		void				processMouse(double xPos, double yPos);
 		void				setDimension(int width, int height, float mult);
 
@@ -22,8 +23,12 @@ class						Control
 		float				gravInverted;
 		float				posX;
 		float				posY;
+		CameraControl*		camera;
+		bool				camOn;
+
 		
 	private:
+		void				_processMouseCoord(double xPos, double yPos);
 		float				_width;
 		float				_height;
 		float				_wMult;

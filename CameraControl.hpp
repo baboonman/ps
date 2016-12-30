@@ -12,7 +12,8 @@
 class						CameraControl
 {
 	public:
-		OpenGLMatrix		getViewMatrix() const { return this->_viewMatrix; };
+		virtual				~CameraControl() {};
+		OpenGLMatrix	&	getViewMatrix() { return this->_viewMatrix; };
 		virtual void		controlKey(int key, int action, int mods) = 0;
 		virtual void		controlMouse(double xPos, double yPos) = 0;
 

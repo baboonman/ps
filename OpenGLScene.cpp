@@ -25,7 +25,7 @@ void					OpenGLScene::createShaderProg(std::string VSFile, std::string FSFile)
 	glUseProgram(this->_shader->getProgram());
 }
 
-void					OpenGLScene::drawScene(OpenGLMatrix view, OpenGLMatrix project)
+void					OpenGLScene::drawScene(OpenGLMatrix & view, OpenGLMatrix & project)
 {
 	glBindVertexArray(this->_vao);
 	this->addMatricesToProgram(this->_shader->getProgram(), *(this->_modelMatrix), view, project);
@@ -34,7 +34,7 @@ void					OpenGLScene::drawScene(OpenGLMatrix view, OpenGLMatrix project)
 	glFinish();
 }
 
-void					OpenGLScene::addMatricesToProgram(GLuint progID, OpenGLMatrix model, OpenGLMatrix view, OpenGLMatrix project)
+void					OpenGLScene::addMatricesToProgram(GLuint progID, OpenGLMatrix & model, OpenGLMatrix & view, OpenGLMatrix & project)
 {
 	GLint			uloc_M;
 	GLint			uloc_V;

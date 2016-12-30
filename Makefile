@@ -15,6 +15,7 @@ SRC= main.cpp \
 	 OpenGLShader.cpp \
 	 vector.cpp \
 	 Control.cpp \
+	 CameraFree.cpp \
 	 Timer.cpp
 
 OBJ= $(SRC:.cpp=.o)

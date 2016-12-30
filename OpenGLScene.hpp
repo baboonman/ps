@@ -13,9 +13,9 @@ class							OpenGLScene
 								~OpenGLScene();
 		void					createShaderProg(std::string VSFile, std::string FSFile);
 
-		void					drawScene(OpenGLMatrix view, OpenGLMatrix project);
-		void					addMatricesToProgram(GLuint progID, OpenGLMatrix model,
-													OpenGLMatrix view, OpenGLMatrix project);
+		void					drawScene(OpenGLMatrix & view, OpenGLMatrix & project);
+		void					addMatricesToProgram(GLuint progID, OpenGLMatrix & model,
+													OpenGLMatrix & view, OpenGLMatrix & project);
 		void					initVbo();
 		
 		OpenGLMatrix*			getModelMatrix();

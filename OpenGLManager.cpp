@@ -42,7 +42,7 @@ OpenGLManager::OpenGLManager()
 OpenGLManager::OpenGLManager(GLfloat width, GLfloat height, std::string winName)
 {
 	this->_setWindowInfo(width, height, winName);
-	this->_setClippingInfo(0.785f, width / height, 0.1, 100000.f);
+	this->_setClippingInfo(0.785f, width / height, 0.1, 1000000.f);
 	this->_initOpenGl();
 	this->_createProjectionMatrix();
 }

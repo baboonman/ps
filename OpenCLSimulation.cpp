@@ -65,7 +65,7 @@ void					OpenCLSimulation::initSimulation()
 	std::cout << "Create pInit Task" << std::endl;
 	this->_pInitTask = new OpenCLTaskPInit(this->_nbParticles);
 	this->_pInitTask->initTask(this->_ctx, this->_device,"kernels/initParticles.cl", "initParticles");
-	this->_pInitTask->setKernelArg(this->_particles, this->_particlesVelocity, 2);
+	this->_pInitTask->setKernelArg(this->_particles, this->_particlesVelocity, 1);
 
 	std::cout << "Create pMove Task" << std::endl;
 	this->_pMoveTask = new OpenCLTaskPMove(this->_nbParticles);
@@ -99,7 +99,7 @@ void					OpenCLSimulation::moveParticles(float xPos, float yPos)
 
 void					OpenCLSimulation::runSimulation()
 {
-	int					i;
+	int					i = 0;
 	float				fps = 0.f;
 	Timer				timer;
 
@@ -117,7 +117,7 @@ timer.start();
 		this->moveParticles(this->_control.posX, this->_control.posY);					//	0.0117
 timer.stop();
 		//this->_glScene->drawScene(this->_viewMatrix, this->_glMan->getProjMat());		//	0.0027
-		this->_glScene->drawScene(this->_control.camera->getViewMatrix(), this->_glMan->getProjMat());		//	0.0027
+		this->_glScene->drawScene(this->_control.camera->getViewMatrix(), this->_glMan->getProjMat(), this->_control.camera->getEyePos());		//	0.0027
 
 		this->_glMan->swap();
 		glfwPollEvents();

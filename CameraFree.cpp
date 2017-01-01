@@ -27,10 +27,14 @@ void			CameraFree::controlKey(int key, int action , int mods)
 		{
 			if (key == 'E') // KEY_SPACE
 				this->_keyPress[2] = yTrP;
+//			else if (key == (int)'W')
+//				this->_keyPress[0] = this->_viewDir;
+//			else if (key == (int)'S')
+//				this->_keyPress[0] = inverse(this->_viewDir);
 			else if (key == (int)'W')
-				this->_keyPress[0] = this->_viewDir;
-			else if (key == (int)'S')
 				this->_keyPress[0] = inverse(this->_viewDir);
+			else if (key == (int)'S')
+				this->_keyPress[0] = this->_viewDir;
 			else if (key == (int)'D')
 				this->_keyPress[1] = this->_viewNorm;
 			else if (key == (int)'A')
@@ -80,8 +84,10 @@ void			CameraFree::calcViewDir()
 void			CameraFree::controlMouse(double xPos, double yPos)
 {
 	double		sens = 0.0005f;
-	double		x = xPos - this->_oldX;
-	double		y = yPos - this->_oldY;
+//	double		x = xPos - this->_oldX;
+//	double		y = yPos - this->_oldY;
+	double		x = this->_oldX - xPos;
+	double		y = this->_oldY - yPos;
 	double		len = sqrt( x * x + y * y );
 	double		xn = x / len;
 	double		yn = y / len;
@@ -104,9 +110,20 @@ Matrix			CameraFree::calculateMatrix()
 	t_vecf yAxis = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
 	t_vecf zAxis = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
 
-	Matrix		viewMatrix(xAxis.x, xAxis.y, xAxis.z, 0,
-						   yAxis.x, yAxis.y, yAxis.z, 0,
-						   zAxis.x, zAxis.y, zAxis.z, 0,
-						   -dot( xAxis, _eyePos ), -dot( yAxis, _eyePos ), dot( zAxis, _eyePos ), 1);
+//	Matrix		viewMatrix(xAxis.x, xAxis.y, xAxis.z, 0,
+//						   yAxis.x, yAxis.y, yAxis.z, 0,
+//						   zAxis.x, zAxis.y, zAxis.z, 0,
+//						   -dot( xAxis, _eyePos ), -dot( yAxis, _eyePos ), dot( zAxis, _eyePos ), 1);
+
+	Matrix		viewMatrix(xAxis.x, yAxis.x, zAxis.x, 0,
+						   xAxis.y, yAxis.y, zAxis.y, 0,
+						   xAxis.z, yAxis.z, zAxis.z, 0,
+						   -dot( xAxis, _eyePos ), -dot( yAxis, _eyePos ), -dot( zAxis, _eyePos ), 1);
+
 	return viewMatrix;
+}
+
+t_vecf &			CameraFree::getEyePos()
+{
+	return (this->_eyePos);
 }

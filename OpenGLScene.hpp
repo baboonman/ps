@@ -3,6 +3,7 @@
 
 # include <map>
 # include <vector>
+# include "vector.hpp"
 # include "OpenGLShader.hpp"
 # include "OpenGLMatrix.hpp"
 
@@ -13,9 +14,10 @@ class							OpenGLScene
 								~OpenGLScene();
 		void					createShaderProg(std::string VSFile, std::string FSFile);
 
-		void					drawScene(OpenGLMatrix & view, OpenGLMatrix & project);
+		void					drawScene(OpenGLMatrix & view, OpenGLMatrix & project, t_vecf & eyePos);
 		void					addMatricesToProgram(GLuint progID, OpenGLMatrix & model,
 													OpenGLMatrix & view, OpenGLMatrix & project);
+		void					addCameraPositionToProgram(GLuint progID, t_vecf& eyePos);
 		void					initVbo();
 		
 		OpenGLMatrix*			getModelMatrix();

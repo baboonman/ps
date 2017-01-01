@@ -25,10 +25,11 @@ void					OpenGLScene::createShaderProg(std::string VSFile, std::string FSFile)
 	glUseProgram(this->_shader->getProgram());
 }
 
-void					OpenGLScene::drawScene(OpenGLMatrix & view, OpenGLMatrix & project)
+void					OpenGLScene::drawScene(OpenGLMatrix & view, OpenGLMatrix & project, t_vecf& eyePos)
 {
 	glBindVertexArray(this->_vao);
 	this->addMatricesToProgram(this->_shader->getProgram(), *(this->_modelMatrix), view, project);
+	this->addCameraPositionToProgram(this->_shader->getProgram(), eyePos);
 	glDrawArrays(GL_POINTS, 0, this->_nbParticles);
 	glBindVertexArray(0);
 	glFinish();
@@ -47,6 +48,15 @@ void					OpenGLScene::addMatricesToProgram(GLuint progID, OpenGLMatrix & model, 
     glUniformMatrix4fv(uloc_M, 1, GL_FALSE, model.getMatrixArray());
     glUniformMatrix4fv(uloc_V, 1, GL_FALSE, view.getMatrixArray());
     glUniformMatrix4fv(uloc_P, 1, GL_FALSE, project.getMatrixArray());
+}
+
+void				OpenGLScene::addCameraPositionToProgram(GLuint progID, t_vecf& eyePos)
+{
+	GLint			uloc;
+
+	uloc = glGetUniformLocation(progID, "eyePos");
+
+	glUniform3f(uloc, eyePos.x, eyePos.y, eyePos.z);
 }
 
 OpenGLMatrix*		OpenGLScene::getModelMatrix()

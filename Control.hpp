@@ -23,7 +23,7 @@ class						Control
 		float				gravInverted;
 		float				posX;
 		float				posY;
-		CameraControl*		camera;
+		CameraFree*			camera;
 		bool				camOn;
 
 		

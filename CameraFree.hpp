@@ -11,6 +11,8 @@ class				CameraFree : public CameraControl
 		void		controlKey(int key, int action, int mods);
 		void		controlMouse(double xPos, double yPos);
 
+		t_vecf &	getEyePos();
+
 	private:
 		Matrix		calculateMatrix( void );
 		void		calcViewDir( void );

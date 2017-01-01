@@ -7,7 +7,7 @@ OpenCLTaskPInit::OpenCLTaskPInit(int nbParticles) : OpenCLTask(nbParticles)
 	pPerLine = std::pow(nbParticles, 1.0f / 3.0f);
 	std::cout << "pPerLine = " << pPerLine << std::endl;
 	this->_defineOptions.insert(t_makePair("PPERLINE", std::to_string(pPerLine) + "f"));
-//	this->_defineOptions.insert(t_makePair("M_PI", std::to_string(3.1415926) + "f"));
+	this->_defineOptions.insert(t_makePair("M_PI", std::to_string(3.1415926) + "f"));
 	this->setSphereDefine();
 }
 

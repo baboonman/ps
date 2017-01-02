@@ -28,6 +28,7 @@ class							OpenCLSimulation
 		void					acquireGLObject();
 		void					releaseGLObject();
 		void					initCLMem(GLuint vbo);
+		void					checkForResize();
 
 	private:
 		cl_int					_err;

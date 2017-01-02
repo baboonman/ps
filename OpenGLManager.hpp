@@ -42,6 +42,7 @@ class							OpenGLManager
 		void					swap( void );
 		void					setControl(Control *control);
 		OpenGLMatrix &			getProjMat();
+		void					resize(float width, float height);
 
 
 	private:

@@ -97,6 +97,14 @@ void					OpenCLSimulation::moveParticles(float xPos, float yPos)
 	clFinish(this->_queue);
 }
 
+void					OpenCLSimulation::checkForResize()
+{
+	if (this->_control.hasResized) {
+		this->_glMan->resize(this->_control.width, this->_control.height);
+		this->_control.hasResized = false;
+	}
+}
+
 void					OpenCLSimulation::runSimulation()
 {
 	int					i = 0;
@@ -117,6 +125,7 @@ timer.start();
 		this->moveParticles(this->_control.posX, this->_control.posY);					//	0.0117
 timer.stop();
 		//this->_glScene->drawScene(this->_viewMatrix, this->_glMan->getProjMat());		//	0.0027
+		this->checkForResize();
 		this->_glScene->drawScene(this->_control.camera->getViewMatrix(), this->_glMan->getProjMat(), this->_control.camera->getEyePos());		//	0.0027
 
 		this->_glMan->swap();

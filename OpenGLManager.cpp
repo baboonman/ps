@@ -24,6 +24,17 @@ static void				cursor_position_callback(GLFWwindow* window, double xPos, double 
 	control->processMouse(xPos, yPos);
 }
 
+static void				framebuffer_size_callback(GLFWwindow* window, int w, int h)
+{
+	Control*			control;
+
+	control = reinterpret_cast<Control *>(glfwGetWindowUserPointer(window));
+
+	control->width = w;
+	control->height = h;
+	glViewport(0, 0, w, h);
+}
+
 void 					error_callback(int error, const char* description)
 {
 	std::cout << "Error #" << error << ": " << description << std::endl;
@@ -91,6 +102,13 @@ void					OpenGLManager::_createProjectionMatrix(void)
 	this->_projectionMatrix.computeProjectionMatrix(this->_clipInfo.fov, this->_clipInfo.aspect, this->_clipInfo.zNear, this->_clipInfo.zFar);
 }
 
+void					OpenGLManager::resize(float width, float height)
+{
+	this->_winInfo.width = width;
+	this->_winInfo.height = height;
+	this->_createProjectionMatrix();
+}
+
 void					OpenGLManager::_initOpenGl( void )
 {
     int     			width, height;
@@ -112,6 +130,7 @@ void					OpenGLManager::_initOpenGl( void )
         exit(0);
     }
     
+	glfwSetFramebufferSizeCallback(this->_window, framebuffer_size_callback);
     glfwSetKeyCallback(this->_window, key_callback);
     glfwSetCursorPosCallback(this->_window, cursor_position_callback);
     glfwMakeContextCurrent(this->_window);

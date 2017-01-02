@@ -25,6 +25,9 @@ class						Control
 		float				posY;
 		CameraFree*			camera;
 		bool				camOn;
+		bool				hasResized;
+		float				width;
+		float				height;
 
 		
 	private:

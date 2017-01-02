@@ -15,6 +15,7 @@ __kernel void	initParticles(__global float4 *particles, __global float4 *particl
 	}
 	else if (isCube == 0)
 	{
+/*
 		float	r = 1.0f;
 		float	q = 0.0f;
 		float	qX = 10.0f;
@@ -36,6 +37,44 @@ __kernel void	initParticles(__global float4 *particles, __global float4 *particl
 		x = r * sin(phi) * cos(theta);
 		y = r * sin(phi) * sin(theta);
 		z = r * cos(phi);
+*/
+
+		float	r = 100.0f;
+//		float	rr = 3.0f * r;
+
+		float	ss = sqrt((float)MAXGID);
+		float	k = i % ((int)ss);
+		float	l = i / ((int)ss);
+		float	stepU = (2.f * M_PI) / ss;
+		float	stepV = (2.f * M_PI) / ss;
+		float	u = stepU * k;
+		float	v = stepV * l;
+
+//		x = (rr + r * cos(v)) * cos(u);
+//		y = (rr + r * cos(v)) * sin(u);
+//		z = r * sin(v);
+
+		x = ( r + cos(u / 2.f) * sin(v) - sin(u / 2.f) * sin(2.f * v) ) * cos(u);
+		y = ( r + cos(u / 2.f) * sin(v) - sin(u / 2.f) * sin(2.f * v) ) * sin(u);
+		z = sin(u / 2.f) * sin(v) + cos(u / 2.f) * sin(2.f * v);
+
+/*
+		float	r = 100.f;
+		float	ss = sqrt((float)MAXGID);
+		float	u = i % ((int)ss);
+		float	v = i / ((int)ss);
+		float	stepT = (2.f * M_PI) / ss;
+		float	stepP = M_PI / ss;
+		float	t = stepT * u;
+		float	p = stepP * v;
+
+		x = r * cos(t) * sin(p);
+		y = r * sin(t) * sin(p);
+		z = r * cos(p);
+*/
+
+//		printf("x: %f, y: %f, z: %f\n", x, y, z);
+
 	}
 	else if (isCube == 2)
 	{

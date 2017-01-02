@@ -65,7 +65,7 @@ void					OpenCLSimulation::initSimulation()
 	std::cout << "Create pInit Task" << std::endl;
 	this->_pInitTask = new OpenCLTaskPInit(this->_nbParticles);
 	this->_pInitTask->initTask(this->_ctx, this->_device,"kernels/initParticles.cl", "initParticles");
-	this->_pInitTask->setKernelArg(this->_particles, this->_particlesVelocity, 1);
+	this->_pInitTask->setKernelArg(this->_particles, this->_particlesVelocity, 0);
 
 	std::cout << "Create pMove Task" << std::endl;
 	this->_pMoveTask = new OpenCLTaskPMove(this->_nbParticles);
@@ -127,7 +127,7 @@ timer.stop();
 		if (i == 100)
 		{	
 			//this->_glMan->setWindowName(std::to_string(fps / i));
-			this->_glMan->setWindowName(std::to_string(fps / i));
+			this->_glMan->setWindowName(std::to_string(1 / (fps / i)));
 			fps = 0.f;
 			i = 0;
 		}

@@ -23,7 +23,7 @@ void main()
 	vec4 partColor = vec4(1.f, 0.f, 0.f, 1.f);
 	vec4 mixColor  = vec4(0.f, 0.f, 1.f, 1.f);
 	vec4 gravColor = vec4(1.f, 1.f, 0.6f, 1.f);
-	vec4 fade =		 vec4(0.f, 0.f, 0.f, 1.f);
+	vec4 fade	   = vec4(0.f, 0.f, 0.f, 1.f);
 
 	float dC = distance(well, in_Position);
 	float dX = length(cross(vec3(in_Position - origin), vec3(axeX))) / length(axeX);
@@ -37,7 +37,7 @@ void main()
 	dX = 1 - clamp(dX, 0.f, 1.f);
 	dY = 1 - clamp(dY, 0.f, 1.f);
 
-	float distView = distance(vec4(eyePos, 1.f), M * in_Position);
+	float distView = distance(vec4(eyePos, 1.f), in_Position);
 	distView = clamp(distView / 1000000, 0.1f, 1.f);
 	float distView2 = clamp(distView / 1000, 0.f, 1.f);
 

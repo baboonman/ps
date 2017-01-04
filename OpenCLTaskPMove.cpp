@@ -32,5 +32,10 @@ void			OpenCLTaskPMove::setKernelVar(float xPos, float yPos, float i)
 	checkCLError(this->_err, "setting kernel var: yPos");
 	this->_err = clSetKernelArg(this->_kernel, 4, sizeof(float), &i);
 	checkCLError(this->_err, "setting kernel var: inverted gravity");
+}
 
+void			OpenCLTaskPMove::setKernelVarEq(char eq)
+{
+	this->_err = clSetKernelArg(this->_kernel, 5, sizeof(char), &eq);
+	checkCLError(this->_err, "setting kernel var: eq");
 }

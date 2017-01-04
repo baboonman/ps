@@ -14,26 +14,32 @@ class						Control
 		void				processInput(int key, int action, int mods);
 		void				processMouse(double xPos, double yPos);
 		void				setDimension(int width, int height, float mult);
+		float				getWidth() const;
+		float				getHeight() const;
+		void				setNewDim(float width, float height);
+		void				setNewMult(float mult);	
+		void				reset();
 
 	public:
 		bool				gravOn;
 		bool				fixed;
-		bool				initCube;
+		int					initShape;
 		bool				launch;
 		float				gravInverted;
+		char				eq;
 		float				posX;
 		float				posY;
 		CameraFree*			camera;
 		bool				camOn;
 		bool				hasResized;
-		float				width;
-		float				height;
-
+		bool				hasReset;
 		
 	private:
 		void				_processMouseCoord(double xPos, double yPos);
+		void				_setHWmult();
 		float				_width;
 		float				_height;
+		float				_mult;
 		float				_wMult;
 		float				_hMult;
 };

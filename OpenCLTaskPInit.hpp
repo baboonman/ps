@@ -9,7 +9,8 @@ class							OpenCLTaskPInit : public OpenCLTask
 	public:
 								OpenCLTaskPInit(int nbParticles);
 								~OpenCLTaskPInit();
-		void					setKernelArg(cl_mem particles, cl_mem particlesV, int isCube);
+		void					setKernelArg(cl_mem particles, cl_mem particlesV);
+		void					setKernelVar(int initShape);
 		void					setSphereDefine(void);
 		
 };

@@ -11,6 +11,7 @@ class							OpenCLTaskPMove : public OpenCLTask
 								~OpenCLTaskPMove();
 		void					setKernelArg(cl_mem particles, cl_mem particlesV);
 		void					setKernelVar(float xPos, float yPos, float i);
+		void					setKernelVarEq(char eq);
 		
 };
 

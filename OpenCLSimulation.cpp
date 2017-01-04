@@ -65,13 +65,15 @@ void					OpenCLSimulation::initSimulation()
 	std::cout << "Create pInit Task" << std::endl;
 	this->_pInitTask = new OpenCLTaskPInit(this->_nbParticles);
 	this->_pInitTask->initTask(this->_ctx, this->_device,"kernels/initParticles.cl", "initParticles");
-	this->_pInitTask->setKernelArg(this->_particles, this->_particlesVelocity, 0);
+	this->_pInitTask->setKernelArg(this->_particles, this->_particlesVelocity);
+	this->_pInitTask->setKernelVar(0);
 
 	std::cout << "Create pMove Task" << std::endl;
 	this->_pMoveTask = new OpenCLTaskPMove(this->_nbParticles);
 	this->_pMoveTask->initTask(this->_ctx, this->_device,"kernels/moveParticles.cl", "moveParticles");
 	this->_pMoveTask->setKernelArg(this->_particles, this->_particlesVelocity);
 	this->_pMoveTask->setKernelVar(0.f, 0.f, this->_control.gravInverted);
+	this->_pMoveTask->setKernelVarEq(0);
 }
 
 void					OpenCLSimulation::initParticles()
@@ -82,15 +84,18 @@ void					OpenCLSimulation::initParticles()
 	clFinish(this->_queue);
 }
 
-void					OpenCLSimulation::moveParticles(float xPos, float yPos)
+void					OpenCLSimulation::updateGravityCenter()
+{
+	this->_pMoveTask->setKernelVar(this->_control.posX, this->_control.posY, this->_control.gravInverted);
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), this->_control.posX);
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), this->_control.posY);
+}
+
+void					OpenCLSimulation::moveParticles()
 {
 	this->acquireGLObject();
 	if (!this->_control.fixed)
-	{
-		this->_pMoveTask->setKernelVar(xPos, yPos, this->_control.gravInverted);
-		glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), xPos);
-		glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), yPos);
-	}
+		this->updateGravityCenter();
 	if (this->_control.launch)
 		this->_pMoveTask->execKernel(this->_queue);
 	this->releaseGLObject();
@@ -100,8 +105,19 @@ void					OpenCLSimulation::moveParticles(float xPos, float yPos)
 void					OpenCLSimulation::checkForResize()
 {
 	if (this->_control.hasResized) {
-		this->_glMan->resize(this->_control.width, this->_control.height);
+		this->_glMan->resize(this->_control.getWidth(), this->_control.getHeight());
 		this->_control.hasResized = false;
+	}
+}
+
+void					OpenCLSimulation::checkForReset()
+{
+	if (this->_control.hasReset) {
+		this->_control.hasReset = false;
+		this->updateGravityCenter();
+		this->_pMoveTask->setKernelVarEq(this->_control.eq);
+		this->_pInitTask->setKernelVar(this->_control.initShape);
+		this->initParticles();
 	}
 }
 
@@ -117,26 +133,23 @@ void					OpenCLSimulation::runSimulation()
 	std::cout << "Start Loop" << std::endl;
 	while (!this->_glMan->shouldClose())
 	{
-//		timer.start();
+		timer.start();
 		glClearColor(0.0, 0.0, 0.0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-timer.start();
-		this->moveParticles(this->_control.posX, this->_control.posY);					//	0.0117
-timer.stop();
-		//this->_glScene->drawScene(this->_viewMatrix, this->_glMan->getProjMat());		//	0.0027
+		this->checkForReset();
 		this->checkForResize();
-		this->_glScene->drawScene(this->_control.camera->getViewMatrix(), this->_glMan->getProjMat(), this->_control.camera->getEyePos());		//	0.0027
-
+		this->moveParticles();
+		this->_glScene->drawScene(this->_control.camera->getViewMatrix(),
+				this->_glMan->getProjMat(), this->_control.camera->getEyePos());
 		this->_glMan->swap();
 		glfwPollEvents();
-//		timer.stop(); 
+		timer.stop(); 
 		fps += timer.getFps();
 		i++;
-		if (i == 100)
+		if (i == 50)
 		{	
-			//this->_glMan->setWindowName(std::to_string(fps / i));
-			this->_glMan->setWindowName(std::to_string(1 / (fps / i)));
+			this->_glMan->setWindowName(std::to_string(fps / i));
 			fps = 0.f;
 			i = 0;
 		}

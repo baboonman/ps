@@ -1,6 +1,7 @@
 #include "Control.hpp"
 
-Control::Control() : gravOn(true), fixed(true), initCube(true), launch(false), gravInverted(1), camOn(false)
+Control::Control() : gravOn(true), fixed(true), initShape(0), launch(false), gravInverted(1),
+	eq(0), posX(0.f), posY(0.f), camOn(false), hasResized(false), hasReset(false)
 {
 	this->camera = new CameraFree({0.f, 0.f, 0.f}, 0.f, 0.f);
 }
@@ -10,28 +11,72 @@ Control::~Control()
 	delete (this->camera);
 }
 
+void					Control::reset()
+{
+	this->gravOn = true;
+	this->fixed = true;
+	this->launch = false;
+	this->gravInverted = 1;
+	this->camOn = false;
+	this->hasResized = false;
+	this->hasReset = true;
+	this->posX = 0.f;
+	this->posY = 0.f;
+
+	delete this->camera;
+	this->camera = new CameraFree({0.f, 0.f, 0.f}, 0.f, 0.f);
+}
+
+void					Control::setDimension(int width, int height, float mult)
+{
+	this->_mult = mult;
+	this->_width = width;
+	this->_height = height;
+	this->_setHWmult();
+}
+
 void					Control::processInput(int key, int action, int mods)
 {
 	if (action == GLFW_PRESS)
 	{
-		if (key == 'G')
+		if (key == 'G') {
 			this->gravOn = !this->gravOn;
-		if (key == 'F')
+			if (this->gravOn)
+				this->gravInverted = 1;
+			else
+				this->gravInverted = 0;
+		}
+		else if (key == 'F')
 			this->fixed = !this->fixed;
-		if (key == 'C')
-			this->initCube = !this->initCube;
-		if (key == 32)
+		else if (key == 32)
 			this->launch = !this->launch;
-		if (key == 'I')
+		else if (key == 'I')
 			this->gravInverted = this->gravInverted * -1;
-		if (key == 'V') {
+		else if (key == 'V')
 			this->camOn = !this->camOn;
+		else if (key == 'R')
+			this->reset();
+		else if (key == 'E') {
+			this->reset();
+			this->eq = (this->eq + 1) % 2;
+		}
+		else if (key > '0' && key < '5') {
+			this->reset();
+			this->initShape = static_cast<int>(key) - '1';
 		}
 	}
 	if (camOn)
 	{
 		this->camera->controlKey(key, action, mods);
 	}
+}
+
+void					Control::processMouse(double xPos, double yPos)
+{
+	if (!camOn)
+		this->_processMouseCoord(xPos, yPos);
+	else
+		this->camera->controlMouse(xPos, yPos);
 }
 
 void					Control::_processMouseCoord(double xPos, double yPos)
@@ -43,22 +88,31 @@ void					Control::_processMouseCoord(double xPos, double yPos)
 	this->posY = ((yPos - halfH) / halfH) * this->_hMult * -1.f;
 }
 
-void					Control::processMouse(double xPos, double yPos)
+void					Control::_setHWmult()
 {
-	if (!camOn)
-		this->_processMouseCoord(xPos, yPos);
-	else
-		this->camera->controlMouse(xPos, yPos);
+	this->_wMult = this->_mult * (this->_width / this->_height);
+	this->_hMult = this->_mult;
 }
 
-void					Control::setDimension(int width, int height, float mult)
+float					Control::getWidth() const
 {
-	float				wMult, hMult;
+	return (this->_width);
+}
 
-	wMult = mult;
-	hMult = mult * height / width;
+float					Control::getHeight() const
+{
+	return (this->_height);
+}
+
+void					Control::setNewDim(float width, float height)
+{
 	this->_width = width;
 	this->_height = height;
-	this->_wMult = wMult;
-	this->_hMult = hMult;
+	this->_setHWmult();
+}
+
+void					Control::setNewMult(float mult)
+{
+	this->_mult = mult;
+	this->_setHWmult();
 }

@@ -23,12 +23,14 @@ class							OpenCLSimulation
 
 	private:
 		void					initParticles();
-		void					moveParticles(float xPos, float yPos);
+		void					moveParticles();
 		void					createContext();
 		void					acquireGLObject();
 		void					releaseGLObject();
 		void					initCLMem(GLuint vbo);
 		void					checkForResize();
+		void					checkForReset();
+		void					updateGravityCenter();
 
 	private:
 		cl_int					_err;

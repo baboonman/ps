@@ -13,14 +13,18 @@ OpenCLTaskPInit::OpenCLTaskPInit(int nbParticles) : OpenCLTask(nbParticles)
 
 OpenCLTaskPInit::~OpenCLTaskPInit() {}
 
-void			OpenCLTaskPInit::setKernelArg(cl_mem particles, cl_mem particlesV, int isCube)
+void			OpenCLTaskPInit::setKernelArg(cl_mem particles, cl_mem particlesV)
 {
 	this->_err = clSetKernelArg(this->_kernel, 0, sizeof(cl_mem), &particles);
 	checkCLError(this->_err, "setting kernel arg: particles");
 	this->_err = clSetKernelArg(this->_kernel, 1, sizeof(cl_mem), &particlesV);
 	checkCLError(this->_err, "setting kernel arg: particlesV");
-	this->_err = clSetKernelArg(this->_kernel, 2, sizeof(cl_mem), &isCube);
-	checkCLError(this->_err, "setting kernel arg: isCube");
+}
+
+void			OpenCLTaskPInit::setKernelVar(int initShape)
+{
+	this->_err = clSetKernelArg(this->_kernel, 2, sizeof(cl_mem), &initShape);
+	checkCLError(this->_err, "setting kernel arg: initShape");
 }
 
 void			OpenCLTaskPInit::setSphereDefine(void)

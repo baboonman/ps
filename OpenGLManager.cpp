@@ -30,8 +30,8 @@ static void				framebuffer_size_callback(GLFWwindow* window, int w, int h)
 
 	control = reinterpret_cast<Control *>(glfwGetWindowUserPointer(window));
 
-	control->width = w;
-	control->height = h;
+	control->setNewDim(w, h);
+	control->hasResized = true;
 	glViewport(0, 0, w, h);
 }
 
@@ -106,6 +106,7 @@ void					OpenGLManager::resize(float width, float height)
 {
 	this->_winInfo.width = width;
 	this->_winInfo.height = height;
+	this->_clipInfo.aspect = width / height;
 	this->_createProjectionMatrix();
 }
 

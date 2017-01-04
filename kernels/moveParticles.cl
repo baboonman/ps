@@ -25,11 +25,6 @@ __kernel void	moveParticles(__global float4 *particles, __global float4 *particl
 		return;
 	}
 		
-//	particlesV[i] += normalize(center - particles[i]) * ( CGM / (d2 / 1000.0f) ) * gi;
-//	particles[i] += particlesV[i];
-
-//	velocity += normalize(center - particle) * ( CGM / (d2 / 1000.0f) ) * gi;
-//	velocity += normalize(center - particle) * ( CGM / (d) ) * gi;
 	velocity += normalize(center - particle) * ( CGM / (d2) ) * gi;
 	particlesV[i] = velocity;
 	particles[i]  = particle + velocity;

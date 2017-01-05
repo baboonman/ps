@@ -1,7 +1,7 @@
 #include "Control.hpp"
 
 Control::Control() : gravOn(true), fixed(true), initShape(0), launch(false), gravInverted(1),
-	eq(0), posX(0.f), posY(0.f), camOn(false), hasResized(false), hasReset(false)
+	eq(0), posX(0.f), posY(0.f), posZ(0.f), camOn(false), hasResized(false), hasReset(false)
 {
 	this->_startEyePos = {0.f, 0.f, 0.f};
 	this->camera = new CameraFree(this->_startEyePos, 0.f, 0.f);
@@ -84,9 +84,22 @@ void					Control::_processMouseCoord(double xPos, double yPos)
 {
 	float				halfW = this->_width / 2;
 	float				halfH = this->_height / 2;
+	float				w = 0.0f;
 
 	this->posX = ((xPos - halfW) / halfW) * this->_wMult;
 	this->posY = ((yPos - halfH) / halfH) * this->_hMult * -1.f;
+	this->posZ = 0.f;
+
+//	std::cout << "Before viewMat mod\t\tx: " << this->posX
+//								  << "\ty: " << this->posY
+//								  << "\tz: " << this->posZ << std::endl; 
+	this->camera->applyMatOnVec(this->posX, this->posY, this->posZ, w);
+//	std::cout << "After  viewMat mod\t\tx: " << this->posX
+//								  << "\ty: " << this->posY
+//								  << "\tz: " << this->posZ << std::endl << std::endl; 
+//	this->posX /= w;
+//	this->posY /= w;
+//	this->posZ /= w;
 }
 
 void					Control::_setHWmult()

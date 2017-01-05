@@ -1,11 +1,12 @@
 __kernel void	moveParticles(__global float4 *particles, __global float4 *particlesV,
-									   float xpos, float ypos, float gi, char eq)
+									   float xpos, float ypos, float zpos, float gi, char eq)
 {
 	const int	i = get_global_id(0);
 	if (i >= MAXGID)
 		return ;
 
-	float4		center = (float4) (xpos, ypos, 0.0f, 1.0f);
+//	float4		center = (float4) (xpos, ypos, 0.0f, 1.0f);
+	float4		center = (float4) (xpos, ypos, zpos, 1.0f);
 	float4		particle = particles[i];
 	float4		velocity = particlesV[i];
 	float		d = distance(particle, center);

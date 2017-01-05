@@ -31,6 +31,7 @@ class						Control
 		char				eq;
 		float				posX;
 		float				posY;
+		float				posZ;
 		CameraFree*			camera;
 		bool				camOn;
 		bool				hasResized;

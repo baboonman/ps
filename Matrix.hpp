@@ -29,6 +29,7 @@ class			Matrix
     	float&  	   	operator[]( int index );
 
 		float			*getMatrix( void );
+		void			multVector( float &x, float &y, float &z, float &w );
 
 	private:
 		float			_matrix[16];

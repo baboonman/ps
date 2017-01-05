@@ -9,7 +9,7 @@ class					OpenGLMatrix
 	public:
 						OpenGLMatrix();
 		Matrix			getMatrix( void ) const;
-		void			setMatrix(Matrix matrix);
+		void			setMatrix( Matrix matrix );
 		void			scale( float scale );
 		void			rotateX( float alpha );
 		void			rotateY( float alpha );
@@ -19,7 +19,8 @@ class					OpenGLMatrix
 		void			computeProjectionMatrix( float fovy, float aspect, float near, float far );
 		float			*getMatrixArray( void );
 		void			resetMatrix( void );
-		OpenGLMatrix&	multMatrix(const OpenGLMatrix& rhs);
+		OpenGLMatrix&	multMatrix( const OpenGLMatrix& rhs );
+		void			multVector( float &x, float &y, float &z, float &w );
 
 	private:
 		Matrix			createScaleMatrix( float scale ) const;

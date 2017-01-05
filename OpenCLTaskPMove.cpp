@@ -24,18 +24,24 @@ void			OpenCLTaskPMove::setKernelArg(cl_mem particles, cl_mem particlesV)
 	checkCLError(this->_err, "setting kernel arg: particlesV");
 }
 
-void			OpenCLTaskPMove::setKernelVar(float xPos, float yPos, float i)
+void			OpenCLTaskPMove::setKernelVar(float xPos, float yPos, float zPos)
 {
 	this->_err = clSetKernelArg(this->_kernel, 2, sizeof(float), &xPos);
 	checkCLError(this->_err, "setting kernel var: xPos");
 	this->_err = clSetKernelArg(this->_kernel, 3, sizeof(float), &yPos);
 	checkCLError(this->_err, "setting kernel var: yPos");
-	this->_err = clSetKernelArg(this->_kernel, 4, sizeof(float), &i);
+	this->_err = clSetKernelArg(this->_kernel, 4, sizeof(float), &zPos);
+	checkCLError(this->_err, "setting kernel var: zPos");
+}
+
+void			OpenCLTaskPMove::setKernelVarGrav(float grav)
+{
+	this->_err = clSetKernelArg(this->_kernel, 5, sizeof(float), &grav);
 	checkCLError(this->_err, "setting kernel var: inverted gravity");
 }
 
 void			OpenCLTaskPMove::setKernelVarEq(char eq)
 {
-	this->_err = clSetKernelArg(this->_kernel, 5, sizeof(char), &eq);
+	this->_err = clSetKernelArg(this->_kernel, 6, sizeof(char), &eq);
 	checkCLError(this->_err, "setting kernel var: eq");
 }

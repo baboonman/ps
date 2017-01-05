@@ -20,17 +20,13 @@ void			CameraFree::controlKey(int key, int action , int mods)
 	{
 		if (mods == MOD_SHIFT)
 		{
-			if (key == 'E') // KEY_SPACE
+			if (key == 'E')
 				this->_keyPress[2] = yTrM;
 		}
 		else
 		{
-			if (key == 'E') // KEY_SPACE
+			if (key == 'E')
 				this->_keyPress[2] = yTrP;
-//			else if (key == (int)'W')
-//				this->_keyPress[0] = this->_viewDir;
-//			else if (key == (int)'S')
-//				this->_keyPress[0] = inverse(this->_viewDir);
 			else if (key == (int)'W')
 				this->_keyPress[0] = inverse(this->_viewDir);
 			else if (key == (int)'S')
@@ -94,6 +90,10 @@ void			CameraFree::controlMouse(double xPos, double yPos)
 	double 		rad = sens * len;
 
 	this->_pitch = rad * yn;
+	if (this->_pitch > PI_2_1)
+		this->_pitch = PI_2_1;
+	else if (this->_pitch < -PI_2_1)
+		this->_pitch = -PI_2_1;
 	this->_yaw = rad * xn;
 	this->calcViewDir();
 	this->_viewMatrix.setMatrix(calculateMatrix());
@@ -110,11 +110,6 @@ Matrix			CameraFree::calculateMatrix()
 	t_vecf yAxis = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
 	t_vecf zAxis = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
 
-//	Matrix		viewMatrix(xAxis.x, xAxis.y, xAxis.z, 0,
-//						   yAxis.x, yAxis.y, yAxis.z, 0,
-//						   zAxis.x, zAxis.y, zAxis.z, 0,
-//						   -dot( xAxis, _eyePos ), -dot( yAxis, _eyePos ), dot( zAxis, _eyePos ), 1);
-
 	Matrix		viewMatrix(xAxis.x, yAxis.x, zAxis.x, 0,
 						   xAxis.y, yAxis.y, zAxis.y, 0,
 						   xAxis.z, yAxis.z, zAxis.z, 0,
@@ -126,4 +121,14 @@ Matrix			CameraFree::calculateMatrix()
 t_vecf &			CameraFree::getEyePos()
 {
 	return (this->_eyePos);
+}
+
+void				CameraFree::applyMatOnVec(float &x, float &y, float &z, float &w)
+{
+//	this->_viewMatrix.multVector(x, y, z, w);
+	OpenGLMatrix	matrix;
+
+	matrix.rotateX(this->_pitch);
+	matrix.rotateY(this->_yaw);
+	matrix.multVector(x, y, z, w);
 }

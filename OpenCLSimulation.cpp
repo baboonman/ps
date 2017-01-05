@@ -67,7 +67,8 @@ void					OpenCLSimulation::initSimulation()
 	this->_pMoveTask = new OpenCLTaskPMove(this->_nbParticles);
 	this->_pMoveTask->initTask(this->_ctx, this->_device,"kernels/moveParticles.cl", "moveParticles");
 	this->_pMoveTask->setKernelArg(this->_particles, this->_particlesVelocity);
-	this->_pMoveTask->setKernelVar(0.f, 0.f, this->_control.gravInverted);
+	this->_pMoveTask->setKernelVar(0.f, 0.f, 0.f);
+	this->_pMoveTask->setKernelVarGrav(this->_control.gravInverted);
 	this->_pMoveTask->setKernelVarEq(0);
 }
 
@@ -81,14 +82,17 @@ void					OpenCLSimulation::initParticles()
 
 void					OpenCLSimulation::updateGravityCenter()
 {
-	this->_pMoveTask->setKernelVar(this->_control.posX, this->_control.posY, this->_control.gravInverted);
+//	this->_pMoveTask->setKernelVar(this->_control.posX, this->_control.posY, this->_control.gravInverted);
+	this->_pMoveTask->setKernelVar(this->_control.posX, this->_control.posY, this->_control.posZ);
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), this->_control.posX);
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), this->_control.posY);
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pZ"), this->_control.posZ);
 }
 
 void					OpenCLSimulation::moveParticles()
 {
 	this->acquireGLObject();
+	this->_pMoveTask->setKernelVarGrav(this->_control.gravInverted);
 	if (!this->_control.fixed)
 		this->updateGravityCenter();
 	if (this->_control.launch)
@@ -139,7 +143,7 @@ void					OpenCLSimulation::runSimulation()
 		timer.stop(); 
 		fps += timer.getFps();
 		i++;
-		if (i == 60)
+		if (i == 30)
 		{	
 			this->_glMan->setWindowName(std::to_string(fps / i) + " fps");
 			fps = 0.f;

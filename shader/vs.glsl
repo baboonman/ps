@@ -6,6 +6,7 @@ uniform mat4 M;
 
 uniform float pX;
 uniform float pY;
+uniform float pZ;
 
 uniform vec3	eyePos;
 
@@ -18,7 +19,8 @@ void main()
 	vec4 origin = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 	vec4 axeX = vec4(1.0f, 0.0f, 0.0f, 0.0f);
 	vec4 axeY = vec4(0.0f, 1.0f, 0.0f, 0.0f);
-	vec4 well = vec4(pX, pY, 0.0f, 1.0);
+//	vec4 well = vec4(pX, pY, 0.0f, 1.0);
+	vec4 well = vec4(pX, pY, pZ, 1.0);
 
 	vec4 partColor = vec4(1.f, 0.f, 0.f, 1.f);
 	vec4 mixColor  = vec4(0.f, 0.f, 1.f, 1.f);

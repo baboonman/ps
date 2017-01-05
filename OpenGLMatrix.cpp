@@ -10,7 +10,7 @@ OpenGLMatrix::OpenGLMatrix()
 {
 }
 
-Matrix					OpenGLMatrix::getMatrix( void ) const { return _matrix; }
+Matrix					OpenGLMatrix::getMatrix( void ) const { return this->_matrix; }
 void					OpenGLMatrix::setMatrix( Matrix matrix ) { this->_matrix = matrix; }
 
 void					OpenGLMatrix::scale( float  scale )
@@ -18,7 +18,7 @@ void					OpenGLMatrix::scale( float  scale )
 	Matrix				matrix;
 
 	matrix = createScaleMatrix(scale);
-	_matrix *= matrix;
+	this->_matrix *= matrix;
 }
 
 void					OpenGLMatrix::rotateX( float alpha )
@@ -26,7 +26,7 @@ void					OpenGLMatrix::rotateX( float alpha )
 	Matrix				matrix;
 
 	matrix = createRotXMatrix(alpha);
-	_matrix *= matrix;
+	this->_matrix *= matrix;
 }
 
 void					OpenGLMatrix::rotateY( float alpha )
@@ -34,7 +34,7 @@ void					OpenGLMatrix::rotateY( float alpha )
 	Matrix				matrix;
 
 	matrix = createRotYMatrix(alpha);
-	_matrix *= matrix;
+	this->_matrix *= matrix;
 }
 
 void					OpenGLMatrix::rotateZ( float alpha )
@@ -42,7 +42,7 @@ void					OpenGLMatrix::rotateZ( float alpha )
 	Matrix				matrix;
 
 	matrix = createRotZMatrix(alpha);
-	_matrix *= matrix;
+	this->_matrix *= matrix;
 }
 
 void					OpenGLMatrix::translate( float x, float y, float z )
@@ -50,7 +50,7 @@ void					OpenGLMatrix::translate( float x, float y, float z )
 	Matrix				matrix;
 
 	matrix = createTranslationMatrix(x, y, z);
-	_matrix *= matrix;
+	this->_matrix *= matrix;
 }
 
 void					OpenGLMatrix::project( float fovy, float aspect, float near, float far )
@@ -58,12 +58,17 @@ void					OpenGLMatrix::project( float fovy, float aspect, float near, float far 
 	Matrix				matrix;
 
 	matrix = createProjectionMatrix(fovy, aspect, near, far);
-	_matrix *= matrix;
+	this->_matrix *= matrix;
 }
 
 void					OpenGLMatrix::computeProjectionMatrix( float fovy, float aspect, float near, float far )
 {
-	_matrix = createProjectionMatrix(fovy, aspect, near, far);
+	this->_matrix = createProjectionMatrix(fovy, aspect, near, far);
+}
+
+void					OpenGLMatrix::multVector( float &x, float &y, float &z, float &w )
+{
+	this->_matrix.multVector(x, y, z, w);	
 }
 
 Matrix					OpenGLMatrix::createScaleMatrix( float scale ) const
@@ -142,16 +147,16 @@ Matrix					OpenGLMatrix::createProjectionMatrix( float fovy, float aspect, float
 
 float				*OpenGLMatrix::getMatrixArray( void )
 {
-	return _matrix.getMatrix();
+	return this->_matrix.getMatrix();
 }
 
 void				OpenGLMatrix::resetMatrix( void )
 {
-	_matrix.identity();
+	this->_matrix.identity();
 }
 
 OpenGLMatrix&		OpenGLMatrix::multMatrix(const OpenGLMatrix& rhs)
 {
-	_matrix *= rhs.getMatrix();
+	this->_matrix *= rhs.getMatrix();
 	return *this;
 }

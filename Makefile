@@ -1,5 +1,5 @@
 CC=		g++
-FLAGS=	-Wall -Wextra -std=c++11 -O3 -g
+FLAGS=	-Wall -Wextra -std=c++11 -g
 NAME=	ps
 
 SRC= main.cpp \

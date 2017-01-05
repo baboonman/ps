@@ -94,7 +94,7 @@ void			CameraFree::controlMouse(double xPos, double yPos)
 		this->_pitch = PI_2_1;
 	else if (this->_pitch < -PI_2_1)
 		this->_pitch = -PI_2_1;
-	this->_yaw = rad * xn;
+//	this->_yaw = rad * xn;
 	this->calcViewDir();
 	this->_viewMatrix.setMatrix(calculateMatrix());
 }
@@ -126,9 +126,44 @@ t_vecf &			CameraFree::getEyePos()
 void				CameraFree::applyMatOnVec(float &x, float &y, float &z, float &w)
 {
 //	this->_viewMatrix.multVector(x, y, z, w);
-	OpenGLMatrix	matrix;
+//	OpenGLMatrix	matrix;
 
-	matrix.rotateX(this->_pitch);
-	matrix.rotateY(this->_yaw);
-	matrix.multVector(x, y, z, w);
+//	matrix.rotateX(this->_pitch);
+//	matrix.rotateY(this->_yaw);
+//	matrix.multVector(x, y, z, w);
+
+	/*
+	 *  *      m0      m3      m6   
+	 *  *      m1      m4      m7   
+	 *  *      m2      m5      m8  
+	*/
+
+	(void)w;
+
+	float			nx, ny, nz;
+	float			c = cos(this->_pitch);
+	float			s = sin(this->_pitch);
+	float			C = 1.f - c;
+
+	float			matrix[16];
+	
+	matrix[0]  = this->_viewNorm.x * this->_viewNorm.x * C + c;
+	matrix[1]  = this->_viewNorm.y * this->_viewNorm.x * C + this->_viewNorm.z * s;
+	matrix[2]  = this->_viewNorm.z * this->_viewNorm.x * C - this->_viewNorm.y * s;
+	matrix[3]  = this->_viewNorm.x * this->_viewNorm.y * C - this->_viewNorm.z * s;
+	matrix[4]  = this->_viewNorm.y * this->_viewNorm.y * C + c;
+	matrix[5]  = this->_viewNorm.z * this->_viewNorm.y * C + this->_viewNorm.x * s;
+	matrix[6]  = this->_viewNorm.x * this->_viewNorm.z * C + this->_viewNorm.y * s;
+	matrix[7]  = this->_viewNorm.y * this->_viewNorm.z * C - this->_viewNorm.x * s;
+	matrix[8]  = this->_viewNorm.z * this->_viewNorm.z * C + c;
+
+
+	nx = matrix[0] * x + matrix[3] * y + matrix[6] * z;
+	ny = matrix[1] * x + matrix[4] * y + matrix[7] * z;
+	nz = matrix[2] * x + matrix[5] * y + matrix[8] * z;
+
+	x = nx;
+	y = ny;
+	z = nz;
+
 }

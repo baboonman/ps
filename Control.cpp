@@ -5,6 +5,8 @@ Control::Control() : gravOn(true), fixed(true), initShape(0), launch(false), gra
 {
 	this->_startEyePos = {0.f, 0.f, 0.f};
 	this->camera = new CameraFree(this->_startEyePos, 0.f, 0.f);
+	this->_tr = {0.f, 0.f, 0.f};
+	this->_tmpEyePos = this->_startEyePos;
 }
 
 Control::~Control()
@@ -23,6 +25,9 @@ void					Control::reset()
 	this->hasReset = true;
 	this->posX = 0.f;
 	this->posY = 0.f;
+	this->posZ = 0.f;
+	this->_tr = {0.f, 0.f, 0.f};
+	this->_tmpEyePos = this->_startEyePos;
 
 	delete this->camera;
 	this->camera = new CameraFree(this->_startEyePos, 0.f, 0.f);
@@ -53,8 +58,6 @@ void					Control::processInput(int key, int action, int mods)
 			this->launch = !this->launch;
 		else if (key == 'I')
 			this->gravInverted = this->gravInverted * -1;
-		else if (key == 'V')
-			this->camOn = !this->camOn;
 		else if (key == 'R')
 			this->reset();
 		else if (key == 'X') {
@@ -64,6 +67,13 @@ void					Control::processInput(int key, int action, int mods)
 		else if (key > '0' && key < '5') {
 			this->reset();
 			this->initShape = static_cast<int>(key) - '1';
+		}
+		else if (key == 'V') {
+			if (!this->camOn)
+				this->_tmpEyePos = this->camera->getEyePos();
+			else
+				this->_tr = add(sub(this->camera->getEyePos(), this->_tmpEyePos), this->_tr);
+			this->camOn = !this->camOn;
 		}
 	}
 	if (camOn)
@@ -84,22 +94,27 @@ void					Control::_processMouseCoord(double xPos, double yPos)
 {
 	float				halfW = this->_width / 2;
 	float				halfH = this->_height / 2;
-	float				w = 0.0f;
+	float				w = 1.f;
 
 	this->posX = ((xPos - halfW) / halfW) * this->_wMult;
 	this->posY = ((yPos - halfH) / halfH) * this->_hMult * -1.f;
 	this->posZ = 0.f;
 
-//	std::cout << "Before viewMat mod\t\tx: " << this->posX
-//								  << "\ty: " << this->posY
-//								  << "\tz: " << this->posZ << std::endl; 
+
+	this->posX += this->_tr.x;
+	this->posY += this->_tr.y;
+	this->posZ += this->_tr.z;
+	
+	std::cout << "Before viewMat mod\t\tx: " << this->posX
+								  << "\ty: " << this->posY
+								  << "\tz: " << this->posZ << std::endl; 
+
 	this->camera->applyMatOnVec(this->posX, this->posY, this->posZ, w);
-//	std::cout << "After  viewMat mod\t\tx: " << this->posX
-//								  << "\ty: " << this->posY
-//								  << "\tz: " << this->posZ << std::endl << std::endl; 
-//	this->posX /= w;
-//	this->posY /= w;
-//	this->posZ /= w;
+
+	std::cout << "After  viewMat mod\t\tx: " << this->posX
+								  << "\ty: " << this->posY
+								  << "\tz: " << this->posZ << std::endl << std::endl; 
+
 }
 
 void					Control::_setHWmult()

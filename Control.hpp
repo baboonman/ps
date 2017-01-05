@@ -46,6 +46,10 @@ class						Control
 		float				_wMult;
 		float				_hMult;
 		t_vecf				_startEyePos;
+
+		t_vecf				_tr;
+		t_vecf				_tmpEyePos;
+		
 };
 
 #endif

@@ -10,6 +10,7 @@ OpenCLSimulation::OpenCLSimulation(int nbParticles) : _nbParticles(nbParticles)
 	this->_glScene->createShaderProg("shader/vs.glsl", "shader/fs.glsl");
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), 0.0f);
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), 0.0f);
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pZ"), 0.0f);
 	this->_glScene->initVbo();
 	this->createContext();
 	this->initCLMem(this->_glScene->getVbo());
@@ -82,7 +83,6 @@ void					OpenCLSimulation::initParticles()
 
 void					OpenCLSimulation::updateGravityCenter()
 {
-//	this->_pMoveTask->setKernelVar(this->_control.posX, this->_control.posY, this->_control.gravInverted);
 	this->_pMoveTask->setKernelVar(this->_control.posX, this->_control.posY, this->_control.posZ);
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), this->_control.posX);
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), this->_control.posY);

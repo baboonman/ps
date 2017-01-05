@@ -4,7 +4,8 @@ OpenGLScene::OpenGLScene(int nbParticles) : _nbParticles(nbParticles)
 {
 	float				tZ;
 
-	tZ = std::pow(nbParticles, 1.0f / 3.0f) * -700.0f;
+//	tZ = std::pow(nbParticles, 1.0f / 3.0f) * -700.0f;
+	tZ = -70000.f;
 	this->_modelMatrix = new OpenGLMatrix;
 	this->_modelMatrix->translate(0, 0, tZ);
 //	this->_modelMatrix->translate(0, 0, -50);

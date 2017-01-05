@@ -15,7 +15,7 @@ __kernel void	initParticles(__global float4 *particles, __global float4 *particl
 	}
 	else if (initShape == 3)
 	{
-		float	r = 100.0f;
+		float	r = 60.0f;
 		float	rr = 3.0f * r;
 
 		float	ss = sqrt((float)MAXGID);

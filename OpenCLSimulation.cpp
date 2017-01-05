@@ -4,7 +4,8 @@ OpenCLSimulation::OpenCLSimulation(int nbParticles) : _nbParticles(nbParticles)
 {
 	std::cout << "Init OpenGL Manager" << std::endl;
 	this->_glMan = new OpenGLManager(1024, 1024, "ps goodness");
-	this->_control.setDimension(1024, 1024, std::pow(nbParticles, 1.0f / 3.0f) * tan(0.392f) * 700.0f);
+//	this->_control.setDimension(1024, 1024, std::pow(nbParticles, 1.0f / 3.0f) * tan(0.392f) * 700.0f);
+	this->_control.setDimension(1024, 1024, tan(0.392f) * 70000.0f);
 	this->_glMan->setControl(&(this->_control));	
 	std::cout << "Init OpenGL Scene" << std::endl;
 	this->_glScene = new OpenGLScene(nbParticles);

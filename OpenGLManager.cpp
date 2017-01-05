@@ -1,6 +1,6 @@
 #include "OpenGLManager.hpp"
 
-void					key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void				key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	Control*			control;
 
@@ -35,7 +35,7 @@ static void				framebuffer_size_callback(GLFWwindow* window, int w, int h)
 	glViewport(0, 0, w, h);
 }
 
-void 					error_callback(int error, const char* description)
+static void				error_callback(int error, const char* description)
 {
 	std::cout << "Error #" << error << ": " << description << std::endl;
 }
@@ -124,13 +124,13 @@ void					OpenGLManager::_initOpenGl( void )
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    this->_window = glfwCreateWindow(this->_winInfo.width, this->_winInfo.height, this->_winInfo.winName.c_str(), NULL, NULL);
-    if (! this->_window )
+    this->_window = glfwCreateWindow(this->_winInfo.width, this->_winInfo.height,
+    					this->_winInfo.winName.c_str(), NULL, NULL);
+    if (!this->_window)
     {
         glfwTerminate();
         exit(0);
     }
-    
 	glfwSetFramebufferSizeCallback(this->_window, framebuffer_size_callback);
     glfwSetKeyCallback(this->_window, key_callback);
     glfwSetCursorPosCallback(this->_window, cursor_position_callback);

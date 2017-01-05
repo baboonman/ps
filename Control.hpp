@@ -20,6 +20,7 @@ class						Control
 		void				setNewDim(float width, float height);
 		void				setNewMult(float mult);	
 		void				reset();
+		void				setStartEyePos(t_vecf eyePos);
 
 	public:
 		bool				gravOn;

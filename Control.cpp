@@ -3,7 +3,8 @@
 Control::Control() : gravOn(true), fixed(true), initShape(0), launch(false), gravInverted(1),
 	eq(0), posX(0.f), posY(0.f), camOn(false), hasResized(false), hasReset(false)
 {
-	this->camera = new CameraFree({0.f, 0.f, 0.f}, 0.f, 0.f);
+	this->_startEyePos = {0.f, 0.f, 0.f};
+	this->camera = new CameraFree(this->_startEyePos, 0.f, 0.f);
 }
 
 Control::~Control()
@@ -24,7 +25,7 @@ void					Control::reset()
 	this->posY = 0.f;
 
 	delete this->camera;
-	this->camera = new CameraFree({0.f, 0.f, 0.f}, 0.f, 0.f);
+	this->camera = new CameraFree(this->_startEyePos, 0.f, 0.f);
 }
 
 void					Control::setDimension(int width, int height, float mult)
@@ -56,7 +57,7 @@ void					Control::processInput(int key, int action, int mods)
 			this->camOn = !this->camOn;
 		else if (key == 'R')
 			this->reset();
-		else if (key == 'E') {
+		else if (key == 'X') {
 			this->reset();
 			this->eq = (this->eq + 1) % 2;
 		}
@@ -115,4 +116,11 @@ void					Control::setNewMult(float mult)
 {
 	this->_mult = mult;
 	this->_setHWmult();
+}
+
+void					Control::setStartEyePos(t_vecf eyePos)
+{
+	this->_startEyePos = eyePos;
+	delete this->camera;
+	this->camera = new CameraFree(this->_startEyePos, 0.f, 0.f);
 }

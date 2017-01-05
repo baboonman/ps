@@ -2,22 +2,18 @@
 
 OpenCLSimulation::OpenCLSimulation(int nbParticles) : _nbParticles(nbParticles)
 {
-	std::cout << "Init OpenGL Manager" << std::endl;
 	this->_glMan = new OpenGLManager(1024, 1024, "ps goodness");
-//	this->_control.setDimension(1024, 1024, std::pow(nbParticles, 1.0f / 3.0f) * tan(0.392f) * 700.0f);
 	this->_control.setDimension(1024, 1024, tan(0.392f) * 70000.0f);
+	this->_control.setStartEyePos({0.f, 0.f, 70000.f});
 	this->_glMan->setControl(&(this->_control));	
-	std::cout << "Init OpenGL Scene" << std::endl;
 	this->_glScene = new OpenGLScene(nbParticles);
 	this->_glScene->createShaderProg("shader/vs.glsl", "shader/fs.glsl");
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), 0.0f);
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), 0.0f);
 	this->_glScene->initVbo();
-	std::cout << "Create CL Context" << std::endl;
 	this->createContext();
 	this->initCLMem(this->_glScene->getVbo());
 	this->initSimulation();
-	std::cout << "Simulation Initialized" << std::endl;
 }
 
 OpenCLSimulation::~OpenCLSimulation()
@@ -63,13 +59,11 @@ void							OpenCLSimulation::createContext()
 
 void					OpenCLSimulation::initSimulation()
 {
-	std::cout << "Create pInit Task" << std::endl;
 	this->_pInitTask = new OpenCLTaskPInit(this->_nbParticles);
 	this->_pInitTask->initTask(this->_ctx, this->_device,"kernels/initParticles.cl", "initParticles");
 	this->_pInitTask->setKernelArg(this->_particles, this->_particlesVelocity);
 	this->_pInitTask->setKernelVar(0);
 
-	std::cout << "Create pMove Task" << std::endl;
 	this->_pMoveTask = new OpenCLTaskPMove(this->_nbParticles);
 	this->_pMoveTask->initTask(this->_ctx, this->_device,"kernels/moveParticles.cl", "moveParticles");
 	this->_pMoveTask->setKernelArg(this->_particles, this->_particlesVelocity);
@@ -128,10 +122,7 @@ void					OpenCLSimulation::runSimulation()
 	float				fps = 0.f;
 	Timer				timer;
 
-	std::cout << "launch Simulation" << std::endl;
 	this->initParticles();
-
-	std::cout << "Start Loop" << std::endl;
 	while (!this->_glMan->shouldClose())
 	{
 		timer.start();
@@ -148,9 +139,9 @@ void					OpenCLSimulation::runSimulation()
 		timer.stop(); 
 		fps += timer.getFps();
 		i++;
-		if (i == 50)
+		if (i == 60)
 		{	
-			this->_glMan->setWindowName(std::to_string(fps / i));
+			this->_glMan->setWindowName(std::to_string(fps / i) + " fps");
 			fps = 0.f;
 			i = 0;
 		}

@@ -72,7 +72,6 @@ void			OpenCLTask::createKernel(std::string fnName, cl_device_id device)
 
 	this->_nbWorkGroup = this->_nbParticles / this->_localWorkSize + 1;
 	this->_globalWorkSize = this->_nbWorkGroup * this->_localWorkSize;
-	printf("global: %lu\nlocal: %lu\n", (this->_globalWorkSize), (this->_localWorkSize));
 }
 
 void			OpenCLTask::execKernel(cl_command_queue queue)

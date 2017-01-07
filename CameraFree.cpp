@@ -8,6 +8,12 @@ CameraFree::CameraFree(t_vecf eyePos, float pitch, float yaw)
 	this->_viewMatrix.setMatrix(calculateMatrix());
 }
 
+void			CameraFree::setMouseFirstPos(double x, double y)
+{
+	this->_oldX = x;
+	this->_oldY = y;
+}
+
 void			CameraFree::controlKey(int key, int action , int mods)
 {
 //	float		sens = 0.5f;
@@ -94,7 +100,7 @@ void			CameraFree::controlMouse(double xPos, double yPos)
 		this->_pitch = PI_2_1;
 	else if (this->_pitch < -PI_2_1)
 		this->_pitch = -PI_2_1;
-//	this->_yaw = rad * xn;
+	this->_yaw = rad * xn;
 	this->calcViewDir();
 	this->_viewMatrix.setMatrix(calculateMatrix());
 }
@@ -166,4 +172,61 @@ void				CameraFree::applyMatOnVec(float &x, float &y, float &z, float &w)
 	y = ny;
 	z = nz;
 
+}
+
+//	Equation (derived from matrix) of the rotation of a point about
+//	an arbitrary line (point on line + dir vec).
+//	Takes P(x, y, z) point to rotate, A(a, b, c) point on rot-axis
+//	and vD(u, v, w) direction vector of the rot-axis
+
+static t_vecf		rotAxis(t_vecf point, t_vecf center, t_vecf dir, float t)
+{
+	t_vecf			res;
+	float			cosT = cos(t);
+	float			sinT = sin(t);
+	float			oneMinusCosT = 1 - cosT;
+
+
+	float			x = point.x;
+	float			y = point.y;
+	float			z = point.z;
+
+	float			a = center.x;
+	float			b = center.y;
+	float			c = center.z;
+
+	float			u = dir.x;
+	float			v = dir.y;
+	float			w = dir.z;
+
+	float			u2 = dir.x * dir.x;
+	float			v2 = dir.y * dir.y;
+	float			w2 = dir.z * dir.z;
+
+    res.x = (a*(v2 + w2) - u*(b*v + c*w - u*x - v*y - w*z)) * oneMinusCosT
+         + x*cosT
+         + (-c*v + b*w - w*y + v*z)*sinT;
+
+    res.y = (b*(u2 + w2) - v*(a*u + c*w - u*x - v*y - w*z)) * oneMinusCosT
+         + y*cosT
+         + (c*u - a*w + w*x - u*z)*sinT;
+
+    res.z = (c*(u2 + v2) - w*(a*u + b*v - u*x - v*y - w*z)) * oneMinusCosT
+         + z*cosT
+         + (-b*u + a*v - v*x + u*y)*sinT;
+
+	return (res);
+}
+
+void				CameraFree::applyViewOnVec(float &x, float &y, float &z)
+{
+	t_vecf			res;
+	t_vecf			vDir = normalize(cross(this->_viewDir, this->_viewNorm));
+
+	res = rotAxis({x, y, z}, this->_eyePos, this->_viewNorm, this->_pitch);
+	res = rotAxis(res, this->_eyePos, vDir, this->_yaw);
+
+	x = res.x;
+	y = res.y;
+	z = res.z;
 }

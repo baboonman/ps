@@ -13,8 +13,10 @@ class					CameraFree : public CameraControl
 		void			controlKey(int key, int action, int mods);
 		void			controlMouse(double xPos, double yPos);
 
+		void			setMouseFirstPos(double x, double y);
 		t_vecf &		getEyePos();
 		void			applyMatOnVec(float &x, float &y, float &z, float &w);
+		void			applyViewOnVec(float &x, float &y, float &z);
 
 	private:
 		Matrix			calculateMatrix( void );

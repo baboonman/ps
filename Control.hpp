@@ -45,6 +45,8 @@ class						Control
 		float				_mult;
 		float				_wMult;
 		float				_hMult;
+		float				_mouseX;
+		float				_mouseY;
 		t_vecf				_startEyePos;
 
 		t_vecf				_tr;

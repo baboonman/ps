@@ -7,6 +7,8 @@ Control::Control() : gravOn(true), fixed(true), initShape(0), launch(false), gra
 	this->camera = new CameraFree(this->_startEyePos, 0.f, 0.f);
 	this->_tr = {0.f, 0.f, 0.f};
 	this->_tmpEyePos = this->_startEyePos;
+	this->_mouseX = 0.f;
+	this->_mouseY = 0.f;
 }
 
 Control::~Control()
@@ -69,8 +71,11 @@ void					Control::processInput(int key, int action, int mods)
 			this->initShape = static_cast<int>(key) - '1';
 		}
 		else if (key == 'V') {
-			if (!this->camOn)
+			if (!this->camOn) {
 				this->_tmpEyePos = this->camera->getEyePos();
+				this->camera->setMouseFirstPos(this->_mouseX, this->_mouseY);
+				this->fixed = true;
+			}
 			else
 				this->_tr = add(sub(this->camera->getEyePos(), this->_tmpEyePos), this->_tr);
 			this->camOn = !this->camOn;
@@ -94,27 +99,19 @@ void					Control::_processMouseCoord(double xPos, double yPos)
 {
 	float				halfW = this->_width / 2;
 	float				halfH = this->_height / 2;
-	float				w = 1.f;
+
+	this->_mouseX = xPos;
+	this->_mouseY = yPos;
 
 	this->posX = ((xPos - halfW) / halfW) * this->_wMult;
 	this->posY = ((yPos - halfH) / halfH) * this->_hMult * -1.f;
 	this->posZ = 0.f;
 
-
 	this->posX += this->_tr.x;
 	this->posY += this->_tr.y;
 	this->posZ += this->_tr.z;
-	
-	std::cout << "Before viewMat mod\t\tx: " << this->posX
-								  << "\ty: " << this->posY
-								  << "\tz: " << this->posZ << std::endl; 
 
-	this->camera->applyMatOnVec(this->posX, this->posY, this->posZ, w);
-
-	std::cout << "After  viewMat mod\t\tx: " << this->posX
-								  << "\ty: " << this->posY
-								  << "\tz: " << this->posZ << std::endl << std::endl; 
-
+	this->camera->applyViewOnVec(this->posX, this->posY, this->posZ);
 }
 
 void					Control::_setHWmult()

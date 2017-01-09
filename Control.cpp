@@ -58,18 +58,18 @@ void					Control::processInput(int key, int action, int mods)
 {
 	if (action == GLFW_PRESS)
 	{
-		if (key == 'G') {
+		if (key == 32)
+			this->launch = !this->launch;
+		else if (key == 'G' && !camOn) {
 			this->gravOn = !this->gravOn;
 			if (this->gravOn)
 				this->gravInverted = 1;
 			else
 				this->gravInverted = 0;
 		}
-		else if (key == 'F')
+		else if (key == 'F' && !camOn)
 			this->fixed = !this->fixed;
-		else if (key == 32)
-			this->launch = !this->launch;
-		else if (key == 'I')
+		else if (key == 'I' && !camOn)
 			this->gravInverted = this->gravInverted * -1;
 		else if (key == 'R')
 			this->reset();
@@ -93,9 +93,7 @@ void					Control::processInput(int key, int action, int mods)
 		}
 	}
 	if (camOn)
-	{
 		this->camera->controlKey(key, action, mods);
-	}
 }
 
 void					Control::processMouse(double xPos, double yPos)

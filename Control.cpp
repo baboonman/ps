@@ -11,9 +11,20 @@ Control::Control() : gravOn(true), fixed(true), initShape(0), launch(false), gra
 	this->_mouseY = 0.f;
 }
 
+Control::Control(Control const & rhs)
+{
+	*this = rhs;
+}
+
 Control::~Control()
 {
 	delete (this->camera);
+}
+
+Control&				Control::operator=(Control const & rhs)
+{
+	(void)rhs;
+	return *this;
 }
 
 void					Control::reset()

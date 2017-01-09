@@ -1,5 +1,23 @@
 #include "CameraFree.hpp"
 
+CameraFree::CameraFree() : _eyePos({0.f, 0.f, 0.f}), _pitch(0), _yaw(0), _oldX(0), _oldY(0)
+{
+	this->initKeyPress();
+	this->calcViewDir();
+	this->_viewMatrix.setMatrix(calculateMatrix());
+}
+
+CameraFree::CameraFree(CameraFree const & rhs)
+{
+	*this = rhs;
+}
+
+CameraFree&		CameraFree::operator=(CameraFree const & rhs)
+{
+	(void)rhs;
+	return *this;
+}
+
 CameraFree::CameraFree(t_vecf eyePos, float pitch, float yaw)
 	: _eyePos(eyePos), _pitch(pitch), _yaw(yaw), _oldX(0), _oldY(0)
 {
@@ -16,7 +34,6 @@ void			CameraFree::setMouseFirstPos(double x, double y)
 
 void			CameraFree::controlKey(int key, int action , int mods)
 {
-//	float		sens = 0.5f;
 	float		sens = 500.f;
 	t_vecf		zero = {0.0f, 0.0f, 0.0f};
 	t_vecf		yTrP = {0.0f, 1.0f, 0.0f};
@@ -86,8 +103,6 @@ void			CameraFree::calcViewDir()
 void			CameraFree::controlMouse(double xPos, double yPos)
 {
 	double		sens = 0.0005f;
-//	double		x = xPos - this->_oldX;
-//	double		y = yPos - this->_oldY;
 	double		x = this->_oldX - xPos;
 	double		y = this->_oldY - yPos;
 	double		len = sqrt( x * x + y * y );

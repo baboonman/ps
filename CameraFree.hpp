@@ -8,8 +8,11 @@
 class					CameraFree : public CameraControl
 {
 	public:
+						CameraFree();
+						CameraFree(CameraFree const & rhs);
 						CameraFree(t_vecf eyePos, float pitch, float yaw);
 		virtual			~CameraFree() {};
+		CameraFree&		operator=(CameraFree const & rhs);
 		void			controlKey(int key, int action, int mods);
 		void			controlMouse(double xPos, double yPos);
 

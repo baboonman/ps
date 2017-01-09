@@ -10,7 +10,9 @@ class						Control
 {
 	public:
 							Control();
+							Control(Control const & rhs);
 							~Control();
+		Control&			operator=(Control const & rhs);
 		void				processInput(int key, int action, int mods);
 		void				processMouse(double xPos, double yPos);
 		void				setDimension(int width, int height, float mult);

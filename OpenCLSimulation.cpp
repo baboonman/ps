@@ -1,12 +1,34 @@
 #include "OpenCLSimulation.hpp"
 
+OpenCLSimulation::OpenCLSimulation() : _nbParticles(100000)
+{
+	this->initSim();
+}
+
 OpenCLSimulation::OpenCLSimulation(int nbParticles) : _nbParticles(nbParticles)
 {
 	this->_glMan = new OpenGLManager(1024, 1024, "ps goodness");
 	this->_control.setDimension(1024, 1024, tan(0.392f) * 70000.0f);
 	this->_control.setStartEyePos({0.f, 0.f, 70000.f});
 	this->_glMan->setControl(&(this->_control));	
-	this->_glScene = new OpenGLScene(nbParticles);
+	this->_glScene = new OpenGLScene(this->_nbParticles);
+	this->_glScene->createShaderProg("shader/vs.glsl", "shader/fs.glsl");
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), 0.0f);
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), 0.0f);
+	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pZ"), 0.0f);
+	this->_glScene->initVbo();
+	this->createContext();
+	this->initCLMem(this->_glScene->getVbo());
+	this->initSimulation();
+}
+
+void					OpenCLSimulation::initSim()
+{
+	this->_glMan = new OpenGLManager(1024, 1024, "ps goodness");
+	this->_control.setDimension(1024, 1024, tan(0.392f) * 70000.0f);
+	this->_control.setStartEyePos({0.f, 0.f, 70000.f});
+	this->_glMan->setControl(&(this->_control));	
+	this->_glScene = new OpenGLScene(this->_nbParticles);
 	this->_glScene->createShaderProg("shader/vs.glsl", "shader/fs.glsl");
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pX"), 0.0f);
 	glUniform1f(glGetUniformLocation(this->_glScene->getProg(), "pY"), 0.0f);

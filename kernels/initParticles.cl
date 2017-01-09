@@ -29,10 +29,6 @@ __kernel void	initParticles(__global float4 *particles, __global float4 *particl
 		x = (rr + r * cos(v)) * cos(u);
 		y = (rr + r * cos(v)) * sin(u);
 		z = r * sin(v);
-
-//		x = ( r + cos(u / 2.f) * sin(v) - sin(u / 2.f) * sin(2.f * v) ) * cos(u);
-//		y = ( r + cos(u / 2.f) * sin(v) - sin(u / 2.f) * sin(2.f * v) ) * sin(u);
-//		z = sin(u / 2.f) * sin(v) + cos(u / 2.f) * sin(2.f * v);
 	}
 	else if (initShape == 2)
 	{

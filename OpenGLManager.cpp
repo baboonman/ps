@@ -58,28 +58,12 @@ OpenGLManager::OpenGLManager(GLfloat width, GLfloat height, std::string winName)
 	this->_createProjectionMatrix();
 }
 
-/*
-OpenGLManager::OpenGLManager(const OpenGLManager & rhs)
-{
-	*this = rhs;
-}
-*/
-
 OpenGLManager::~OpenGLManager()
 {
     glfwDestroyWindow(this->_window);
     glfwTerminate();
     // delete this->_window ???
 }
-
-/*
-OpenGLManager&			OpenGLManager::operator=(const OpenGLManager & rhs)
-{
-	this->_window = 
-	
-	return (*this);
-}
-*/
 
 void					OpenGLManager::_setWindowInfo(GLfloat width, GLfloat height, std::string name)
 {

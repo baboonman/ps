@@ -10,8 +10,11 @@
 class							OpenGLScene
 {
 	public:
+								OpenGLScene();
+								OpenGLScene(OpenGLScene const & rhs);
 								OpenGLScene(int nbParticles);
-								~OpenGLScene();
+		virtual					~OpenGLScene();
+		OpenGLScene&			operator=(OpenGLScene const & rhs);
 		void					createShaderProg(std::string VSFile, std::string FSFile);
 
 		void					drawScene(OpenGLMatrix & view, OpenGLMatrix & project, t_vecf & eyePos);

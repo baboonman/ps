@@ -8,6 +8,9 @@ class					OpenGLMatrix
 {
 	public:
 						OpenGLMatrix();
+						OpenGLMatrix(OpenGLMatrix const & rhs);
+		virtual			~OpenGLMatrix();
+		OpenGLMatrix&	operator=(OpenGLMatrix const & rhs);
 		Matrix			getMatrix( void ) const;
 		void			setMatrix( Matrix matrix );
 		void			scale( float scale );

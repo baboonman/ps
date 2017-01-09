@@ -52,20 +52,9 @@ float&					Matrix::operator[](int index)
 	    return this->_matrix[index];
 }
 
-Matrix&					Matrix::operator=(const Matrix & rhs)
-{
-	(void)rhs;
-	return *this;
-}
-
 Matrix::Matrix()
 {
 	identity();
-}
-
-Matrix::Matrix(Matrix const & rhs)
-{
-	*this = rhs;
 }
 
 Matrix::Matrix( float m00, float m01, float m02, float m03,
@@ -89,10 +78,6 @@ Matrix::Matrix( float m00, float m01, float m02, float m03,
 	this->_matrix[13] = m13;
 	this->_matrix[14] = m14;
 	this->_matrix[15] = m15;
-}
-
-Matrix::~Matrix()
-{
 }
 
 Matrix&					Matrix::identity()

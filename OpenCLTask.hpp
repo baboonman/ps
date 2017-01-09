@@ -15,8 +15,11 @@ typedef std::pair<std::string, std::string> t_makePair;
 class							OpenCLTask
 {
 	public:
+								OpenCLTask();
 								OpenCLTask(int nbParticles);
-								~OpenCLTask();
+								OpenCLTask(OpenCLTask const & rhs);
+		virtual					~OpenCLTask();
+		OpenCLTask &			operator=(OpenCLTask const & rhs);
 		void					initTask(cl_context ctx, cl_device_id device,
 									std::string progName, std::string kernelName);
 		void					execKernel(cl_command_queue queue);

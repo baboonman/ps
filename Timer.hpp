@@ -10,11 +10,16 @@ class						Timer
 {
 	public:
 							Timer();
+							Timer(Timer const & rhs);
+		virtual				~Timer();
+		Timer&				operator=(Timer const & rhs);
 							Timer(bool startRunning);
 		void				start();
 		void				stop();
 		std::string			getTime();
 		float				getFps();
+		struct timeval		getStart() const;
+		struct timeval		getEnd() const;
 
 	private:
 		struct timeval		_start;

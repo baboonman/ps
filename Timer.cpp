@@ -2,6 +2,20 @@
 
 Timer::Timer() {}
 
+Timer::Timer(Timer const & rhs)
+{
+	*this = rhs;
+}
+
+Timer::~Timer() {}
+
+Timer&			Timer::operator=(Timer const & rhs)
+{
+	this->_start = rhs.getStart();
+	this->_end = rhs.getEnd();
+	return *this;
+}
+
 Timer::Timer(bool startRunning)
 {
 	if (startRunning)
@@ -33,9 +47,18 @@ std::string		Timer::getTime()
 	return ss.str();
 }
 
-#include <iostream>
 float			Timer::getFps()
 {
 	float		fTime = this->_time / 1000000.0f;
 	return (1.f / fTime);
+}
+
+struct timeval	Timer::getStart() const
+{
+	return (this->_start);
+}
+
+struct timeval	Timer::getEnd() const
+{
+	return (this->_end);
 }

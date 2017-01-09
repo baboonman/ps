@@ -10,6 +10,10 @@ OpenGLMatrix::OpenGLMatrix()
 {
 }
 
+OpenGLMatrix::~OpenGLMatrix()
+{
+}
+
 Matrix					OpenGLMatrix::getMatrix( void ) const { return this->_matrix; }
 void					OpenGLMatrix::setMatrix( Matrix matrix ) { this->_matrix = matrix; }
 

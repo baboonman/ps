@@ -1,6 +1,14 @@
 #include "OpenGLShader.hpp"
 #include <iostream>
 
+OpenGLShader::OpenGLShader()
+{
+}
+
+OpenGLShader::~OpenGLShader()
+{
+}
+
 char		*OpenGLShader::filetobuf(const char *file)
 {
     FILE *fptr;

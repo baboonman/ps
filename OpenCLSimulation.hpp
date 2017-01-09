@@ -15,12 +15,12 @@
 class							OpenCLSimulation
 {
 	public:
-//								OpenCLSimulation(OpenCLSimulation const & rhs);
+								OpenCLSimulation(OpenCLSimulation const & rhs);
 								OpenCLSimulation(int nbParticles);
 								OpenCLSimulation();
 		virtual					~OpenCLSimulation();
 
-//		OpenCLSimulation&		operator=(OpenCLSimulation const & rhs);
+		OpenCLSimulation&		operator=(OpenCLSimulation const & rhs);
 		void					initSimulation();
 		void					runSimulation();
 

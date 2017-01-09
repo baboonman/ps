@@ -32,10 +32,10 @@ class							OpenGLManager
 {
 	public:
 								OpenGLManager();
-//								OpenGLManager(const OpenGLManager & rhs);
+								OpenGLManager(const OpenGLManager & rhs);
 								OpenGLManager(GLfloat width, GLfloat height, std::string winName);
-								~OpenGLManager();
-//		OpenGLManager&			operator=(const OpenGLManager & rhs);
+		virtual					~OpenGLManager();
+		OpenGLManager&			operator=(const OpenGLManager & rhs);
 
 		void					setWindowName(std::string name);
 		int						shouldClose( void );

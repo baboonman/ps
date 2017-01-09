@@ -130,9 +130,7 @@ void					OpenCLSimulation::runSimulation()
 	while (!this->_glMan->shouldClose())
 	{
 		timer.start();
-		glClearColor(0.0, 0.0, 0.0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 		this->checkForReset();
 		this->checkForResize();
 		this->moveParticles();

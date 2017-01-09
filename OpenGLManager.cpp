@@ -140,6 +140,7 @@ void					OpenGLManager::_initOpenGl( void )
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 	glDepthFunc(GL_LESS);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glfwGetFramebufferSize(this->_window, &(width), &(height));
     glViewport(0, 0, width, height);
 }
